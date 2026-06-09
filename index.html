@@ -3,496 +3,617 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>QbD Experiment · GC-301 Phase 2b · Interactive Results</title>
-  <meta name="description" content="Interactive visualization of a Quality-by-Design (QbD) operationalization of ICH E6(R3) Critical-to-Quality factors against a traditional protocol arm, on a fictional GC-301 Phase 2b dossier." />
+  <title>Does Quality-by-Design actually deliver? A methodology experiment on ICH E6(R3)</title>
+  <meta name="description" content="A single-author methodology experiment: two protocols of equivalent scientific design, 99 stress scenarios from EMA + FDA + literature, six pre-registered metrics. All examples synthetic." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-
-  <!-- Tailwind v4 CDN: enables all Tailwind utility classes used by the Tailwind Plus components below. -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Brand-palette overrides so we can use familiar Tailwind names with our pharma brand colors.
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: { 50:'#eef7fb', 100:'#d6ecf3', 500:'#0f6e9c', 600:'#0b4a6f', 700:'#093c5a', 900:'#072c44' },
-            accent: { 400:'#2dd4bf', 500:'#14b8a6', 600:'#0d9488' }
-          },
-          fontFamily: {
-            sans: ['Inter','ui-sans-serif','system-ui','sans-serif'],
-            mono: ['"JetBrains Mono"','ui-monospace','monospace']
-          }
-        }
-      }
-    };
-  </script>
-
-  <!-- Existing custom styles (panel-specific: scenario cards, heatmap, cost-row, etc.) -->
-  <link rel="stylesheet" href="styles.css" />
+  <!-- Editorial serif (Source Serif 4) + display (Newsreader) + mono for numbers -->
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=2026-06-09-journal" />
 </head>
-<body class="font-sans antialiased text-gray-900 bg-white">
+<body>
 
   <!-- ============================================================
-       ANNOUNCEMENT BANNER (slim strip above the header)
+       MASTHEAD (small, journal-style)
        ============================================================ -->
-  <div class="bg-brand-600 text-white">
-    <div class="mx-auto max-w-7xl px-6 py-2.5 lg:px-8 flex items-center justify-center gap-x-3 text-sm/6">
-      <span class="inline-flex items-center rounded-full bg-accent-500/20 px-2.5 py-0.5 text-xs font-semibold text-accent-400 ring-1 ring-inset ring-accent-500/30">v1</span>
-      <span class="hidden sm:inline">Pre-registered methodology paper posted with full harness, scenario battery, and 76 references.</span>
-      <span class="sm:hidden">Methodology paper v1 posted</span>
-      <a href="methodology.html" class="font-semibold underline-offset-2 hover:underline">Read it <span aria-hidden="true">→</span></a>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       HEADER  (Tailwind Plus 'with right-aligned nav', adapted)
-       ============================================================ -->
-  <header class="bg-white sticky top-0 z-50 border-b border-gray-200/80 backdrop-blur supports-[backdrop-filter]:bg-white/85">
-    <nav aria-label="Global" class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
-      <a href="#top" class="-m-1.5 p-1.5 flex items-center gap-x-3">
-        <span class="sr-only">QbD Experiment</span>
-        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-white font-bold tracking-tight">Q</span>
-        <span class="leading-tight">
-          <span class="block text-sm font-semibold text-gray-900">QbD Experiment</span>
-          <span class="block text-[11px] uppercase tracking-[0.14em] text-gray-500">GC-301 Phase 2b · Synthetic</span>
-        </span>
-      </a>
-      <div class="flex lg:hidden">
-        <button type="button" id="mobile-menu-button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-          <span class="sr-only">Open main menu</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6">
-            <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
-      </div>
-      <div class="hidden lg:flex lg:gap-x-10">
-        <a href="#panel-1" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Scenarios</a>
-        <a href="#panel-2" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Metrics</a>
-        <a href="#panel-3" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Cost model</a>
-        <a href="#panel-4" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">CtQ rubric</a>
-        <a href="#panel-5" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Layer breakdown</a>
-        <a href="methodology.html" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Methodology</a>
-      </div>
-    </nav>
-    <!-- Mobile menu (toggled by JS at bottom of file) -->
-    <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-200">
-      <div class="space-y-1 px-4 py-3">
-        <a href="#panel-1" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Scenarios</a>
-        <a href="#panel-2" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Metrics</a>
-        <a href="#panel-3" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Cost model</a>
-        <a href="#panel-4" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">CtQ rubric</a>
-        <a href="#panel-5" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Layer breakdown</a>
-        <a href="methodology.html" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Methodology</a>
-      </div>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a href="#top" class="masthead-title">The Methodology Notebook</a>
+      <span class="masthead-meta">Vol. 1 · No. 1 · 9 June 2026</span>
     </div>
   </header>
 
   <!-- ============================================================
-       HERO  (Tailwind Plus 'simple centered', re-tuned: no gradient
-       blobs, pharma-restraint palette, real eyebrow + lead)
+       ARTICLE
        ============================================================ -->
-  <section id="top" class="relative isolate overflow-hidden bg-white">
-    <!-- Subtle background grid (replaces the consumer-tech gradient blobs) -->
-    <svg aria-hidden="true" class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(60rem_50rem_at_top,white,transparent)]">
-      <defs>
-        <pattern id="grid-bg" width="80" height="80" x="50%" y="-1" patternUnits="userSpaceOnUse">
-          <path d="M.5 200V.5H200" fill="none"/>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" stroke-width="0" fill="url(#grid-bg)"/>
-    </svg>
+  <article id="top">
 
-    <div class="mx-auto max-w-3xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 lg:pt-32 lg:pb-28 lg:px-8 text-center">
-      <div class="inline-flex items-center gap-x-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-700 ring-1 ring-inset ring-brand-600/20 bg-brand-50">
-        <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent-500"></span>
-        Pre-registered methodology experiment
-      </div>
-      <h1 class="mt-6 text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-        Does a Quality-by-Design protocol body actually outperform a traditional one under ICH&nbsp;E6(R3)?
-      </h1>
-      <p class="mt-6 text-pretty text-base/7 text-gray-600 sm:text-lg/8 max-w-2xl mx-auto">
-        Two arms of the same synthetic GC-301 Phase 2b psoriasis study, stress-tested against 99 protocol-change
-        scenarios drawn from EMA GCP IWG 2024, FDA BIMO FY17–FY24, and the post-2024 RBM / DCT / amendment-driver
-        literature. Arm A follows current industry-traditional drafting. Arm B operationalizes E6(R3)'s
-        Critical-to-Quality factor register inside the protocol body.
+    <!-- ===== Article header ===== -->
+    <header class="article-head">
+      <div class="kicker">Methodology · Clinical operations · ICH E6(R3)</div>
+      <h1 class="article-title">Does Quality-by-Design actually deliver what ICH E6(R3) promised?</h1>
+      <p class="article-deck">
+        Two protocols of equivalent scientific design. Same molecule. Ninety-nine stress scenarios drawn from EMA, FDA, and the recent risk-based-monitoring literature. Six pre-registered metrics. One honest answer.
       </p>
-      <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-        <a href="#panel-2" class="rounded-md bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 transition-colors">
-          See the six metrics
-        </a>
-        <a href="#panel-3" class="rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-colors">
-          Try the cost model
-        </a>
-        <a href="methodology.html" class="text-sm font-semibold text-brand-600 hover:text-brand-500 transition-colors">
-          Read the paper <span aria-hidden="true">→</span>
-        </a>
+      <div class="byline">
+        <span><strong>Gourav Pandey</strong></span>
+        <span class="dot">·</span>
+        <span>9 June 2026</span>
+        <span class="dot">·</span>
+        <span>~14 minute read</span>
+        <span class="dot">·</span>
+        <a href="https://github.com/gauravpandey36/qbd-experiment-viz" rel="noopener">Open source</a>
       </div>
-    </div>
-  </section>
-
-  <!-- ============================================================
-       HEADLINE STATS BAND
-       6 pre-registered metrics, TRAD → QBD, with deltas + sources.
-       (Hardcoded from harness/results/comparison_dataset.json.
-        app.js no longer needs to populate this; it is static.)
-       ============================================================ -->
-  <section class="bg-gray-50 border-y border-gray-200/80">
-    <div class="mx-auto max-w-7xl px-6 py-14 sm:py-20 lg:px-8">
-      <div class="mx-auto max-w-2xl text-center">
-        <h2 class="text-sm font-semibold uppercase tracking-[0.14em] text-brand-600">Headline result</h2>
-        <p class="mt-2 text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">
-          All three pre-registered thresholds met. <span class="text-gray-500 font-normal">n = 99 per arm · Welch p &lt; 0.0001 across the board.</span>
-        </p>
-      </div>
-
-      <dl id="hero-stats" class="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-px overflow-hidden rounded-2xl bg-gray-200/80 text-center sm:max-w-none sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        <!-- M1 -->
-        <div class="flex flex-col bg-white px-6 py-7">
-          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M1 · Amendments / protocol</dt>
-          <dd class="order-first">
-            <div class="flex items-baseline justify-center gap-x-2 font-mono">
-              <span class="text-2xl text-gray-400 line-through">3.32</span>
-              <span class="text-3xl font-semibold tracking-tight text-gray-900">2.11</span>
-            </div>
-            <div class="mt-1 text-sm font-semibold text-accent-600">−36.5%</div>
-          </dd>
-          <dt class="mt-3 text-[11px] text-gray-400">Getz 2024</dt>
-        </div>
-        <!-- M2 -->
-        <div class="flex flex-col bg-white px-6 py-7">
-          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M2 · Queries / page</dt>
-          <dd class="order-first">
-            <div class="flex items-baseline justify-center gap-x-2 font-mono">
-              <span class="text-2xl text-gray-400 line-through">7.96</span>
-              <span class="text-3xl font-semibold tracking-tight text-gray-900">5.29</span>
-            </div>
-            <div class="mt-1 text-sm font-semibold text-accent-600">−33.5%</div>
-          </dd>
-          <dt class="mt-3 text-[11px] text-gray-400">de Viron 2022</dt>
-        </div>
-        <!-- M3 -->
-        <div class="flex flex-col bg-white px-6 py-7">
-          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M3 · Deviations / 100 pts</dt>
-          <dd class="order-first">
-            <div class="flex items-baseline justify-center gap-x-2 font-mono">
-              <span class="text-2xl text-gray-400 line-through">11.99</span>
-              <span class="text-3xl font-semibold tracking-tight text-gray-900">5.70</span>
-            </div>
-            <div class="mt-1 text-sm font-semibold text-accent-600">−52.4%</div>
-          </dd>
-          <dt class="mt-3 text-[11px] text-gray-400">Cilley 2025</dt>
-        </div>
-        <!-- M4 -->
-        <div class="flex flex-col bg-white px-6 py-7">
-          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M4 · Amendment cost</dt>
-          <dd class="order-first">
-            <div class="flex items-baseline justify-center gap-x-2 font-mono">
-              <span class="text-2xl text-gray-400 line-through">$536K</span>
-              <span class="text-3xl font-semibold tracking-tight text-gray-900">$250K</span>
-            </div>
-            <div class="mt-1 text-sm font-semibold text-accent-600">−53.4%</div>
-          </dd>
-          <dt class="mt-3 text-[11px] text-gray-400">Tufts CSDD</dt>
-        </div>
-        <!-- M5 -->
-        <div class="flex flex-col bg-white px-6 py-7">
-          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M5 · Need-to-amend cycle</dt>
-          <dd class="order-first">
-            <div class="flex items-baseline justify-center gap-x-2 font-mono">
-              <span class="text-2xl text-gray-400 line-through">260d</span>
-              <span class="text-3xl font-semibold tracking-tight text-gray-900">143d</span>
-            </div>
-            <div class="mt-1 text-sm font-semibold text-accent-600">−45.1%</div>
-          </dd>
-          <dt class="mt-3 text-[11px] text-gray-400">Tufts / D7 target</dt>
-        </div>
-        <!-- M6 -->
-        <div class="flex flex-col bg-white px-6 py-7">
-          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M6 · CtQ rubric (0–32)</dt>
-          <dd class="order-first">
-            <div class="flex items-baseline justify-center gap-x-2 font-mono">
-              <span class="text-2xl text-gray-400 line-through">15.0</span>
-              <span class="text-3xl font-semibold tracking-tight text-gray-900">27.2</span>
-            </div>
-            <div class="mt-1 text-sm font-semibold text-accent-600">+81.4%</div>
-          </dd>
-          <dt class="mt-3 text-[11px] text-gray-400">Triplicate scoring</dt>
-        </div>
-      </dl>
-
-      <p class="mx-auto mt-8 max-w-2xl text-center text-sm text-gray-500">
-        Pre-registered thresholds: ≥30% on M1+M2, ≥50% on M3. All met. 1000-iteration bootstrap CIs.
-        Old → new values shown with strike-through; full source data on
-        <a class="font-semibold text-brand-600 hover:text-brand-500" href="methodology.html">methodology page</a>.
+      <p class="disclaimer-pill">
+        All examples reference GeneriCorp Therapeutics, a fictional pharmaceutical company built specifically for research and educational purposes. No proprietary content from any current or prior employer is used or implied.
       </p>
-    </div>
-  </section>
+    </header>
 
-  <!-- ============================================================
-       PANEL 1: SCENARIO DIFF
-       (Unchanged from prior version; app.js populates #scenario-grid)
-       ============================================================ -->
-  <section class="section" id="panel-1">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-kicker">Panel 1 · Show-the-work</div>
-        <h2>Scenario-by-scenario decision diff</h2>
-        <p>
-          For each protocol-change scenario, what would the traditional arm decide (amendment / monitor / no-action)
-          versus the QbD arm's walk through decision tree D7? Filter by family to interrogate where the lift comes from.
-        </p>
-      </div>
-      <div class="filter-bar" id="scenario-filters"></div>
-      <div class="scenario-grid" id="scenario-grid"></div>
-      <p class="caption" style="margin-top:18px; color:var(--ink-muted); font-size:12.5px;">
-        99 scenarios across Layer A (7 hand-authored), Layer B (38 EMA-derived), Layer C (54 FDA BIMO + DCT).
-        Real harness output from <code>harness/run_harness.py</code>.
+    <!-- ===== Lede ===== -->
+    <section class="prose lede">
+      <p class="dropcap">
+        On 19 December 2024, the Committee for Medicinal Products for Human Use adopted, at Step 5, a revision of the ICH E6 Good Clinical Practice guideline that had been twenty-eight years in the making. Nine months later, on 18 September 2025, the United States Food and Drug Administration finalised its adoption guidance. On 28 April 2026, the United Kingdom's Medicines for Human Use (Clinical Trials) (Amendment) Regulations 2025 came into force, rewriting the statutory basis underneath the new guideline.
       </p>
-    </div>
-  </section>
+      <p>
+        The revision is structurally unlike its predecessors. Where the 1996 original and the 2016 R2 update were procedural documents, long lists of "the sponsor shall," "the investigator shall", the R3 revision is principles-and-annex. It says less. It demands more from the people writing the protocol.
+      </p>
+      <p>
+        This article is about whether that demand is worth meeting. It documents a methodology experiment I ran over the past month against a fully synthetic pharmaceutical substrate. The substrate is fictional. The regulator and consulting evidence behind the design is real. The headline result is that a protocol body authored to operationalise E6(R3)'s Critical-to-Quality factor analysis reduces amendments by 36.5%, queries by 33.5%, and patient-impacting deviations by 52.4% against an otherwise-identical traditional protocol on a battery of ninety-nine regulator-derived stress scenarios, with all three pre-registered thresholds met at p &lt; 0.0001.
+      </p>
+      <p>
+        What follows is what I read, what I built, how I scored it, and what an honest reading of the numbers actually says.
+      </p>
+    </section>
 
-  <!-- ============================================================
-       PANEL 2: METRIC COMPARISON (canvas charts via app.js)
-       ============================================================ -->
-  <section class="section section-tint" id="panel-2">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-kicker">Panel 2 · Per-metric arm comparison</div>
-        <h2>Six pre-registered metrics, side by side</h2>
-        <p>
-          M1–M5 are derived from the 99-scenario battery. M6 is the structural quality rubric.
-          Error bars reflect 1000-iteration bootstrap CIs from the deterministic harness.
-        </p>
-      </div>
-      <div class="chart-grid" id="metric-charts"></div>
-    </div>
-  </section>
+    <!-- ============================================================
+         §1 What E6(R3) actually said
+         ============================================================ -->
+    <section class="prose">
+      <h2><span class="section-no">I.</span> What ICH E6(R3) actually said</h2>
 
-  <!-- ============================================================
-       PANEL 3: COST MODEL  (live sliders; app.js handles math)
-       ============================================================ -->
-  <section class="section" id="panel-3">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-kicker">Panel 3 · Interactive cost model</div>
-        <h2>Stress-test the financial assumptions yourself</h2>
-        <p>
-          All four levers (Tufts amendment cost, per-site burn rate, amendment cycle days, site count) are live.
-          M4 (cost delta) and M5 (duration delta) recompute on every input.
-        </p>
-      </div>
+      <p>
+        The R3 revision distils its position into eleven principles and a series of annexes. Annex 1 covers interventional clinical trials and was adopted alongside the principles in December 2024. Annex 2 covers decentralised, pragmatic, and real-world-data trials and remains in Step 2/3 draft as of June 2026.
+      </p>
 
-      <div class="cost-layout">
-        <div class="card">
-          <h3>Assumptions</h3>
+      <p>
+        Two passages do most of the operational work. The first is Principle 6:
+      </p>
 
-          <div class="slider-row">
-            <label>Amendment cost per protocol amendment (USD)
-              <span class="val" id="v-amend-cost">$535,000</span>
-            </label>
-            <input type="range" id="s-amend-cost" min="100000" max="700000" step="5000" value="535000" />
+      <blockquote class="pull-quote">
+        <p>"Quality should be built into the scientific and operational design and conduct of clinical trials."</p>
+        <cite>ICH E6(R3), Principle 6</cite>
+      </blockquote>
+
+      <p>
+        The grammar is deliberate. <em>Built into</em>, not bolted on. Not inspected for, not monitored after the fact, not assured by SOPs at the trial-conduct stage. Built into the design, which means built into the protocol body, which means built in by the person at the keyboard who is writing the protocol. The second is paragraph 3.10:
+      </p>
+
+      <blockquote class="pull-quote">
+        <p>"The sponsor should identify, evaluate, and manage risks that could affect the quality of the trial, considering both the science and the operations of the trial, including the protocol itself."</p>
+        <cite>ICH E6(R3), §3.10 (paraphrased synthesis)</cite>
+      </blockquote>
+
+      <p>
+        Read together they describe a new operating reality. As of June 2026, a Phase 2b sponsor submitting a protocol to the EU expects that protocol to encode a Critical-to-Quality factor analysis explicitly. The FDA expects the same since September 2025. The MHRA expects it under a new statutory amendment regime since 28 April 2026. The Swissmedic inspectorate continues to publish under the older R2 framework but signals expectation alignment going forward. PMDA is a full member of the EMA-FDA-PMDA trilateral GCP collaboration and continues to attend all teleconferences. The trilateral region has, in effect, decided.
+      </p>
+
+      <p>
+        What R3 does <em>not</em> say is how to do this. The guideline gives the requirement. The how lives in the supporting documents, the eight Critical-to-Quality factor families enumerated by ICH E8(R1) and operationalised by the CTTI Quality-by-Design framework, and in whatever discipline the sponsor's protocol team brings to the exercise.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §2 Why E6(R3) asked to adopt QbD
+         ============================================================ -->
+    <section class="prose">
+      <h2><span class="section-no">II.</span> Why ICH E6(R3) asked for Quality-by-Design</h2>
+
+      <p>
+        The amendment burden is the answer. A protocol amendment, a substantive change to a registered protocol after first-subject-first-visit, is the single largest source of avoidable cost and calendar delay in late-stage clinical development. The Tufts Center for the Study of Drug Development tracks this number across industry, and the 2024 update by Getz and colleagues is the empirical anchor of the field<sup><a href="#ref-1">1</a></sup>.
+      </p>
+
+      <figure class="figure stat-block">
+        <div class="big-stats">
+          <div>
+            <div class="big-stat-num">76<span class="unit">%</span></div>
+            <div class="big-stat-label">of Phase I–IV protocols are amended at least once</div>
           </div>
-
-          <div class="slider-row">
-            <label>Per-site weekly burn rate (USD)
-              <span class="val" id="v-burn">$85,000</span>
-            </label>
-            <input type="range" id="s-burn" min="20000" max="150000" step="1000" value="85000" />
+          <div>
+            <div class="big-stat-num">3.3</div>
+            <div class="big-stat-label">mean amendments per protocol (up from 2.1 in 2015)</div>
           </div>
-
-          <div class="slider-row">
-            <label>Amendment full-cycle days (need&rarr;approval)
-              <span class="val" id="v-cycle">475</span>
-            </label>
-            <input type="range" id="s-cycle" min="120" max="700" step="5" value="475" />
+          <div>
+            <div class="big-stat-num">$535<span class="unit">K</span></div>
+            <div class="big-stat-label">median direct cost of a Phase 3 amendment</div>
           </div>
-
-          <div class="slider-row">
-            <label>Active site count
-              <span class="val" id="v-sites">22</span>
-            </label>
-            <input type="range" id="s-sites" min="4" max="80" step="1" value="22" />
+          <div>
+            <div class="big-stat-num">260<span class="unit">d</span></div>
+            <div class="big-stat-label">mean time from "need-to-amend" to last oversight approval</div>
           </div>
-
-          <p class="caption">
-            Defaults from Getz/Tufts CSDD 2024 amendment-economics anchors. Per-site burn from CRO RFI benchmarks.
-            Cycle days = 215 (multi-version) + 260 (need-to-approval) per Tufts CSDD.
-          </p>
+          <div>
+            <div class="big-stat-num">215<span class="unit">d</span></div>
+            <div class="big-stat-label">mean days sites operate against multiple protocol versions</div>
+          </div>
+          <div>
+            <div class="big-stat-num">77<span class="unit">%</span></div>
+            <div class="big-stat-label">of amendments classified as "unavoidable" by sponsors</div>
+          </div>
         </div>
+        <figcaption>Figure 1. Industry-wide protocol amendment burden, Phase I–IV. Source: Getz et al., Tufts CSDD, 2024<sup><a href="#ref-1">1</a></sup>.</figcaption>
+      </figure>
 
-        <div class="cost-output">
-          <h4>Recomputed M4 + M5</h4>
-          <div class="cost-row">
-            <span class="k">Total amendment cost, Traditional arm</span>
-            <span class="v" id="o-trad-total">&mdash;</span>
-          </div>
-          <div class="cost-row">
-            <span class="k">Total amendment cost, QbD arm</span>
-            <span class="v" id="o-qbd-total">&mdash;</span>
-          </div>
-          <div class="cost-row">
-            <span class="k">M4, cost delta (USD)</span>
-            <span class="v" id="o-delta-cost">&mdash;</span>
-          </div>
-          <div class="cost-row">
-            <span class="k">M4, cost delta (%)</span>
-            <span class="v" id="o-delta-pct">&mdash;</span>
-          </div>
-          <div class="cost-row">
-            <span class="k">M5, duration delta (days saved)</span>
-            <span class="v" id="o-delta-days">&mdash;</span>
-          </div>
-          <div class="cost-row">
-            <span class="k">Burn-rate savings @ delta-days &times; sites</span>
-            <span class="v" id="o-burn-save">&mdash;</span>
-          </div>
-          <p class="caption" style="margin-top:14px;">
-            Traditional arm baseline: 3.3 amendments / protocol (Getz 2024). QbD arm: 2.0 (mid of the &ge;30%
-            regulatory commitment and the RBM-evidence 50% ceiling). All numbers regenerate live.
-          </p>
-        </div>
+      <p>
+        The numbers compound. An amendment costs USD 535,000 directly, and an additional 215 days during which clinical sites operate against more than one version of the protocol simultaneously, and another 260 days from the moment the need-to-amend is identified to the moment the last oversight body signs off. The amendment cycle from problem recognition to fully-aligned operation is on the order of 475 days. Compounded across the three to four amendments that the typical Phase 3 protocol now sees, this lands somewhere around two billion dollars per asset in average industry-wide drug-development cost<sup><a href="#ref-2">2</a></sup>.
+      </p>
+
+      <p>
+        The Tufts figure is corroborated in oncology specifically by Botto and colleagues' 2024 benchmarking dataset of 950 protocols and 2,188 amendments. 91.1% prevalence and 4.0 mean amendments per oncology protocol, against 72.1% prevalence and 3.0 mean amendments in non-oncology<sup><a href="#ref-3">3</a></sup>. What changed in the last twenty-four months is the empirical link from amendments to downstream patient-impacting deviations. Cilley and colleagues' 2025 retrospective on fourteen trials and 202 subjects found amendment count and trial duration significantly predict deviation rate at p = 0.0003<sup><a href="#ref-4">4</a></sup>. The chain from protocol-authoring choices to conduct-phase patient outcomes is now empirical, not merely plausible.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §3 What the consulting firms say it costs the business
+         ============================================================ -->
+    <section class="prose">
+      <h2><span class="section-no">III.</span> What the consulting firms say it costs</h2>
+
+      <p>
+        Regulators tell sponsors what went wrong. Consulting firms tell them what it cost. The figures across the major firms do not converge to a single methodology, they each measure the problem from a different angle, but they bracket the same order of magnitude. The picture is unambiguous: the amendment burden is the most expensive piece of operational drag the industry is currently carrying.
+      </p>
+
+      <table class="table consulting-table">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Finding</th>
+            <th>Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Deloitte</strong>: Measuring R&amp;D</td>
+            <td>Average drug development cost per asset: <strong>USD 2.23 billion</strong>. Phase III cycle times <strong>+12% YoY</strong>.</td>
+            <td>2024</td>
+          </tr>
+          <tr>
+            <td><strong>Bain &amp; Company</strong>: Front Line Insights</td>
+            <td>Cost of clinical-trial delay: <strong>USD 500,000 per day</strong>. NMEs per dollar R&amp;D spend down <strong>21%</strong> in the last decade.</td>
+            <td>2024</td>
+          </tr>
+          <tr>
+            <td><strong>McKinsey &amp; Company</strong></td>
+            <td>Productivity gain from modernised clinical IT: <strong>15–30%</strong>. RBQM uptake correlates with Phase II → III progression rates.</td>
+            <td>2024</td>
+          </tr>
+          <tr>
+            <td><strong>KPMG</strong>: Intelligent Life Sciences</td>
+            <td>Potential economic value of AI in pharma: <strong>USD 350–410 billion per year by 2030</strong>. Clinical-development is the largest single bucket.</td>
+            <td>2025</td>
+          </tr>
+          <tr>
+            <td><strong>EY</strong>: Pulse of the Industry</td>
+            <td>Top-20 biopharma R&amp;D spend grew <strong>9% YoY</strong> against <strong>flat productivity</strong>. Quality-related rework cited as a structural drag.</td>
+            <td>2023</td>
+          </tr>
+          <tr>
+            <td><strong>BCG</strong></td>
+            <td>Decentralised-trial-element penetration up from <strong>~12% in 2020 to 53% in 2024</strong>; but only <strong>~30%</strong> of sponsors operationalise it within the protocol body.</td>
+            <td>2024</td>
+          </tr>
+          <tr>
+            <td><strong>PwC</strong></td>
+            <td>Frames clinical-trial design as the central bottleneck for trial-time-to-market. Recommends RBQM as a first-line lever.</td>
+            <td>2024</td>
+          </tr>
+          <tr>
+            <td><strong>Mayo Clinic Proceedings</strong></td>
+            <td>Data-driven trial-design innovations associated with material reductions in protocol amendments and screen-failure rates.</td>
+            <td>2023</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="caption">
+        Table 1. Headline figures from public consulting and academic publications, 2023–2025. Full citations in References. These numbers do not use a single methodology and should not be summed.
+      </p>
+
+      <p>
+        Read across the row of consulting estimates, three signals reinforce each other. First, the per-protocol cost of avoidable amendments and delays compounds into the multi-billion-dollar-per-asset envelope that Deloitte tracks. Second, the operational drag is concentrated at the sponsor's protocol-design-plus-monitoring interface, which is what E6(R3) §3.10 is written to address. Third, the proposed remedies. RBQM, decentralised-trial elements, modernised data flows, are precisely the apparatus that the new guideline asks sponsors to operationalise inside the protocol body.
+      </p>
+
+      <p>
+        The EMA's own GCP Inspectors Working Group draws this picture from the regulator side. The 2024 annual report enumerated 67 inspections producing 335 major and critical findings. <strong>81.8% of CRITICAL findings were sponsor-side</strong>, up from 63.9% in 2023<sup><a href="#ref-5">5</a></sup>. Trial Management was the second-largest finding category at 86 findings; within it, Monitoring alone accounted for 35. The interface where the failures concentrate is exactly the interface the QbD requirement is meant to govern.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §4 What we researched to build the 99 scenarios
+         ============================================================ -->
+    <section class="prose">
+      <h2><span class="section-no">IV.</span> What we read to build the scenario battery</h2>
+
+      <p>
+        A methodology experiment that stress-tests two protocols against each other lives or dies on the scenario battery. A small set of hand-picked cases is open to the obvious objection that the author cherry-picked. A large random sample from invented scenarios is not anchored to anything regulators or sponsors will recognise. The battery used here is built from three regulator-anchored layers, deliberately, to triangulate.
+      </p>
+
+      <h3>The reading list</h3>
+
+      <ul class="source-list">
+        <li><strong>EMA GCP Inspectors Working Group, 2023 and 2024 annual reports</strong>. 335 major and critical findings catalogued across 67 inspections in 2024; categorised by Trial Management, Data Management, Protocol Design, CSR/Statistics, Audit. Source for Layer B (n=38 scenarios).</li>
+        <li><strong>FDA Bioresearch Monitoring (BIMO) Inspection Metrics, FY17–FY24</strong>: Sponsor/CRO and Clinical Investigator Form FDA 483 categories across seven fiscal years. Source for Layer C (n=50 scenarios) plus four DCT-specific scenarios.</li>
+        <li><strong>MHRA GCP Inspection Metrics, 2007–2020</strong>, historical baseline; cross-referenced against the EMA and FDA categories.</li>
+        <li><strong>Swissmedic GCP Annual Reports, 2022–2024</strong>, secondary triangulation, particularly on cross-trilateral compliance trends.</li>
+        <li><strong>Eighty-seven Elicit papers and 569 Google Scholar results</strong> across ten QbD-themed queries: protocol amendments, CtQ factors, RBM outcomes, DCT evidence, IB quality, site-selection feasibility, vendor data integrity, AI-assisted authoring, and two cross-cutting queries on controlled comparisons and revision drivers. The strongest empirical anchors are listed in References.</li>
+        <li><strong>Eight consulting-firm publications</strong>: Deloitte, Bain, McKinsey, KPMG, EY, BCG, PwC, plus Mayo Clinic Proceedings and NEJM Catalyst for the academic-and-delivery view. Headline figures fed Section III.</li>
+      </ul>
+
+      <h3>The mapping rule</h3>
+
+      <p>
+        Each finding family in the regulator catalogues was mapped one-to-one to a scenario archetype. EMA 2024's "Monitoring procedures failed to detect protocol deviations" became scenario MN-001. "Insufficient communication lines between trial sites and service providers" became MN-004. FDA BIMO Sponsor/CRO 483 finding "Failure to submit IND safety report for SUSAR within 15 days" became IS-001. The rule was strict: one regulator-published failure family produces one scenario; the scenario carries the source citation and the verbatim or near-verbatim language of the original finding.
+      </p>
+
+      <h3>The result</h3>
+
+      <table class="table layer-table">
+        <thead>
+          <tr><th>Layer</th><th>Source</th><th>n</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>A</strong></td><td>Hand-authored from author's 15 years of pharma CMC + clinical operations experience</td><td class="num">7</td></tr>
+          <tr><td><strong>B</strong></td><td>Derived from EMA GCP IWG 2023 + 2024 finding sub-categories (Monitoring, Data Management, Protocol/CRF Design, CSR/Stats, Audit)</td><td class="num">38</td></tr>
+          <tr><td><strong>C</strong></td><td>Derived from FDA BIMO Sponsor/CRO + Clinical Investigator 483 categories FY17–FY23, plus 4 DCT-specific scenarios anchored to Trials@Home, Hernandez 2024 JAMA, Chen 2024 CTS, and Jean-Louis 2024 Science</td><td class="num">54</td></tr>
+          <tr class="total"><td colspan="2"><strong>Total</strong></td><td class="num"><strong>99</strong></td></tr>
+        </tbody>
+      </table>
+      <p class="caption">Table 2. Scenario battery composition by layer.</p>
+
+      <p>
+        The Layer A scenarios are necessarily author-specific. Anyone running the same methodology elsewhere would write their own Layer A from their own experience. Layers B and C are extractable from public regulator catalogues and can be reproduced by any group with access to those catalogues. The full battery is published as JSON in the open-source repository and is browseable at the end of this article.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §5 How we compared two methods head to head
+         ============================================================ -->
+    <section class="prose">
+      <h2><span class="section-no">V.</span> How we compared the two methods, head to head</h2>
+
+      <p>
+        The substrate for the comparison is GeneriCorp Therapeutics GC-301, a fictional anti-IL-17A IgG1 monoclonal antibody in Phase 2b for moderate-to-severe plaque psoriasis. Three-arm, double-blind, placebo-controlled, n ≈ 360 across 45 sites, twelve-week primary endpoint of PASI 75 response rate. The science is held identical between the two arms.
+      </p>
+
+      <div class="comparison-table-wrap">
+        <table class="table compare-table">
+          <thead>
+            <tr>
+              <th>Apparatus</th>
+              <th>Arm TRAD (Traditional, E6(R2)-era)</th>
+              <th>Arm QBD (Quality-by-Design, E6(R3))</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Protocol length</td>
+              <td>~25,000 words</td>
+              <td>~12,000 words, with 5 cross-referenced companion docs</td>
+            </tr>
+            <tr>
+              <td>CtQ factor analysis</td>
+              <td>None in protocol body</td>
+              <td>All 8 CTTI / E8(R1) families operationalised in §11</td>
+            </tr>
+            <tr>
+              <td>Quality Tolerance Limits</td>
+              <td>Not declared in protocol</td>
+              <td>5 QTLs declared in §11.2 with green / amber / red thresholds</td>
+            </tr>
+            <tr>
+              <td>Risk register</td>
+              <td>10 risks, single-line mitigations (sparse)</td>
+              <td>35 risks, FMEA-scored severity × likelihood × detectability</td>
+            </tr>
+            <tr>
+              <td>Monitoring approach</td>
+              <td>On-site SDV / SDR at every visit (100% on-site)</td>
+              <td>50% centralised statistical monitoring, 30% off-site, 20% on-site</td>
+            </tr>
+            <tr>
+              <td>DCT playbook</td>
+              <td>None</td>
+              <td>BYOD, ePRO, eConsent, home-nursing vendor management, telehealth</td>
+            </tr>
+            <tr>
+              <td>Amendment decision tree</td>
+              <td>Not pre-authored</td>
+              <td>5 pre-authored paths with target cycle times (P-CONT, P-SOP, P-NSUB, P-SUB, P-URG)</td>
+            </tr>
+            <tr>
+              <td>Apparatus coverage score</td>
+              <td>12.7%</td>
+              <td>100%</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="caption">Table 3. Quality apparatus comparison, Arm TRAD vs Arm QBD. Scientific design held identical between arms.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- ============================================================
-       PANEL 4: RUBRIC HEATMAP  (app.js populates #heatmap-trad/qbd)
-       ============================================================ -->
-  <section class="section section-tint" id="panel-4">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-kicker">Panel 4 · CtQ rubric heat map</div>
-        <h2>Where does the QbD lift actually live?</h2>
-        <p>
-          32 cells: 8 Critical-to-Quality families &times; 4 score levels (0=Absent, 1=Mentioned,
-          2=Defined, 3=Operationalized). Both arms shown side by side.
-        </p>
-      </div>
+      <h3>The harness</h3>
 
-      <div class="heatmap-layout">
-        <div class="card">
-          <div class="heatmap-title">Traditional arm</div>
-          <div class="heatmap" id="heatmap-trad"></div>
-        </div>
-        <div class="card">
-          <div class="heatmap-title">QbD arm</div>
-          <div class="heatmap" id="heatmap-qbd"></div>
-        </div>
-      </div>
+      <p>
+        The scoring harness is 766 lines of Python with no external dependencies beyond the standard library. It reads the scenarios JSON, instantiates two protocol-arm objects parameterised by their apparatus coverage and their per-Critical-to-Quality family decision paths, executes the battery once per arm in a deterministic order, computes the six metric totals with per-scenario contribution decomposition, runs 1000 bootstrap iterations to produce 95% confidence intervals, and computes Welch t-test p-values for the arm comparison. The harness is deterministic and reproducible from a seed.
+      </p>
 
-      <div class="legend">
-        <span><span class="swatch" style="background:#f1f5f9"></span>0 Absent</span>
-        <span><span class="swatch" style="background:rgba(20,184,166,0.18)"></span>1 Mentioned</span>
-        <span><span class="swatch" style="background:rgba(20,184,166,0.45)"></span>2 Defined</span>
-        <span><span class="swatch" style="background:rgba(11,74,111,0.85)"></span>3 Operationalized</span>
-      </div>
-    </div>
-  </section>
+      <p>
+        The harness is rule-based, not LLM-based. The per-scenario decision for each arm is encoded at scenario-authoring time as a function of the arm's apparatus coverage. The choice is deliberate. An LLM scorer would introduce a second source of variance, the model's drift between runs, on top of the apparatus-coverage variance the experiment is trying to measure. A rule-based scorer isolates the question the experiment is trying to answer.
+      </p>
 
-  <!-- ============================================================
-       PANEL 5: LAYER BREAKDOWN (Chart.js canvas #layer-chart)
-       ============================================================ -->
-  <section class="section" id="panel-5">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-kicker">Panel 5 · Generalization</div>
-        <h2>Does the lift hold beyond the seven hand-authored scenarios?</h2>
-        <p>
-          M1 (amendments triggered) split by scenario provenance: Layer A (hand-authored, n=7),
-          Layer B (EMA-derived, n=38), Layer C (FDA BIMO + DCT, n=54). The QbD lift should be stable across layers.
-        </p>
-      </div>
-      <div class="card">
-        <h3>Amendments per protocol, by scenario layer</h3>
-        <div class="chart-wrap"><canvas id="layer-chart" height="220"></canvas></div>
-        <p class="caption">Both arms shown for each layer. A flat QbD line across layers is the "real lift, not just hand-cherry-picked" signature.</p>
-      </div>
-    </div>
-  </section>
+      <h3>The metrics</h3>
 
-  <!-- ============================================================
-       FOOTER (Tailwind Plus 4-column simple, adapted)
-       ============================================================ -->
-  <footer class="bg-white border-t border-gray-200/80">
-    <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
-      <div class="xl:grid xl:grid-cols-3 xl:gap-8">
-        <div class="space-y-4">
-          <a href="#top" class="-m-1.5 p-1.5 flex items-center gap-x-3">
-            <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-white font-bold tracking-tight">Q</span>
-            <span class="leading-tight">
-              <span class="block text-base font-semibold text-gray-900">QbD Experiment</span>
-              <span class="block text-[11px] uppercase tracking-[0.14em] text-gray-500">GC-301 Phase 2b · Synthetic</span>
-            </span>
-          </a>
-          <p class="text-sm/6 text-gray-600 max-w-sm">
-            Methodology paper for Gourav Pandey's ICH E6(R3) Critical-to-Quality operationalization study,
-            GC-301 Phase 2b synthetic dossier.
-          </p>
-        </div>
+      <p>
+        Six metrics, pre-specified, anchored to literature values where literature anchors exist:
+      </p>
 
-        <div class="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-          <div class="md:grid md:grid-cols-2 md:gap-8">
-            <div>
-              <h3 class="text-sm/6 font-semibold text-gray-900">Explore</h3>
-              <ul role="list" class="mt-5 space-y-3">
-                <li><a href="#panel-1" class="text-sm/6 text-gray-600 hover:text-brand-600">Scenarios</a></li>
-                <li><a href="#panel-2" class="text-sm/6 text-gray-600 hover:text-brand-600">Metrics</a></li>
-                <li><a href="#panel-3" class="text-sm/6 text-gray-600 hover:text-brand-600">Cost model</a></li>
-                <li><a href="#panel-4" class="text-sm/6 text-gray-600 hover:text-brand-600">CtQ rubric</a></li>
-                <li><a href="#panel-5" class="text-sm/6 text-gray-600 hover:text-brand-600">Layer breakdown</a></li>
-              </ul>
+      <ol class="metric-defs">
+        <li><strong>M1: Amendments triggered per protocol.</strong> Calibrated to the Getz 2024 anchor of 3.3 mean amendments per Phase I–IV protocol.</li>
+        <li><strong>M2: Queries per CRF page.</strong> Calibrated to the de Viron 2022 anchor: 82.9% of 1,676 sites showing central-statistical-monitoring KRI quality improvement.</li>
+        <li><strong>M3: Patient-impacting deviations per 100 participants.</strong> Calibrated to the Cilley 2025 amendment-to-deviation linkage finding.</li>
+        <li><strong>M4: Amendment cost in USD thousand.</strong> Calibrated to the Tufts USD 535,000 Phase 3 median, with a USD 320,000 Phase 2b de-rate.</li>
+        <li><strong>M5: Need-to-amend cycle in days.</strong> Calibrated to the Tufts 260-day mean.</li>
+        <li><strong>M6: CtQ rubric score (0 to 32).</strong> Eight CtQ families × four levels each (Absent / Mentioned / Defined / Operationalised).</li>
+      </ol>
+
+      <h3>Pre-registered thresholds</h3>
+
+      <p>
+        Before scoring, three directional thresholds were committed: at least 30% reduction on M1, at least 30% reduction on M2, at least 50% reduction on M3. These are not free choices. They are the directional reductions that the published RBQM literature licenses as moderate, the de Viron 2022 and Yamada 2024 evidence suggests a realistic ceiling closer to 50–60% on M2 alone, so 30% is a conservative pre-registration. The pre-registration discipline says: a QBD arm that does not hit any of the three is reported as a negative result with the same prominence as a positive result.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §6 What we found
+         ============================================================ -->
+    <section class="prose">
+      <h2><span class="section-no">VI.</span> What we found</h2>
+
+      <p>
+        All three pre-registered thresholds were met. The detail matters more than the headline.
+      </p>
+
+      <figure class="figure result-figure">
+        <div class="result-grid">
+
+          <div class="result-card">
+            <div class="result-metric">M1 · Amendments per protocol</div>
+            <div class="result-bar">
+              <div class="bar-row">
+                <span class="bar-label">TRAD</span>
+                <span class="bar-track"><span class="bar-fill trad" style="width:100%"></span></span>
+                <span class="bar-num">3.32 <span class="bar-err">±0.07</span></span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">QBD</span>
+                <span class="bar-track"><span class="bar-fill qbd" style="width:63.5%"></span></span>
+                <span class="bar-num">2.11 <span class="bar-err">±0.06</span></span>
+              </div>
             </div>
-            <div class="mt-10 md:mt-0">
-              <h3 class="text-sm/6 font-semibold text-gray-900">Paper</h3>
-              <ul role="list" class="mt-5 space-y-3">
-                <li><a href="methodology.html" class="text-sm/6 text-gray-600 hover:text-brand-600">Methodology paper</a></li>
-                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Pre-registration (OSF, planned)</a></li>
-                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Reference list (76)</a></li>
-              </ul>
-            </div>
+            <div class="result-delta">−36.5% &nbsp; <span class="met">met ≥30% threshold</span></div>
           </div>
-          <div class="md:grid md:grid-cols-2 md:gap-8">
-            <div>
-              <h3 class="text-sm/6 font-semibold text-gray-900">Open source</h3>
-              <ul role="list" class="mt-5 space-y-3">
-                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Scenario battery (JSON)</a></li>
-                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Harness (Python)</a></li>
-                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Both protocols</a></li>
-                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">GitHub repo (placeholder)</a></li>
-              </ul>
+
+          <div class="result-card">
+            <div class="result-metric">M2 · Queries per CRF page</div>
+            <div class="result-bar">
+              <div class="bar-row">
+                <span class="bar-label">TRAD</span>
+                <span class="bar-track"><span class="bar-fill trad" style="width:100%"></span></span>
+                <span class="bar-num">7.96 <span class="bar-err">±0.16</span></span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">QBD</span>
+                <span class="bar-track"><span class="bar-fill qbd" style="width:66.5%"></span></span>
+                <span class="bar-num">5.29 <span class="bar-err">±0.13</span></span>
+              </div>
             </div>
-            <div class="mt-10 md:mt-0">
-              <h3 class="text-sm/6 font-semibold text-gray-900">Disclaimer</h3>
-              <p class="mt-5 text-xs/6 text-gray-500">
-                All examples reference GeneriCorp Therapeutics, a fictional pharmaceutical company built
-                specifically for research and educational purposes. No proprietary content from any current or
-                prior employer is used or implied.
-              </p>
-            </div>
+            <div class="result-delta">−33.5% &nbsp; <span class="met">met ≥30% threshold</span></div>
           </div>
+
+          <div class="result-card">
+            <div class="result-metric">M3 · Patient-impacting deviations / 100 pts</div>
+            <div class="result-bar">
+              <div class="bar-row">
+                <span class="bar-label">TRAD</span>
+                <span class="bar-track"><span class="bar-fill trad" style="width:100%"></span></span>
+                <span class="bar-num">11.99 <span class="bar-err">±0.20</span></span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">QBD</span>
+                <span class="bar-track"><span class="bar-fill qbd" style="width:47.6%"></span></span>
+                <span class="bar-num">5.70 <span class="bar-err">±0.24</span></span>
+              </div>
+            </div>
+            <div class="result-delta">−52.4% &nbsp; <span class="met">met ≥50% threshold</span></div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-metric">M4 · Amendment cost (USD thousand)</div>
+            <div class="result-bar">
+              <div class="bar-row">
+                <span class="bar-label">TRAD</span>
+                <span class="bar-track"><span class="bar-fill trad" style="width:100%"></span></span>
+                <span class="bar-num">536 <span class="bar-err">±11</span></span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">QBD</span>
+                <span class="bar-track"><span class="bar-fill qbd" style="width:46.6%"></span></span>
+                <span class="bar-num">250 <span class="bar-err">±12</span></span>
+              </div>
+            </div>
+            <div class="result-delta">−53.4%</div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-metric">M5 · Need-to-amend cycle (days)</div>
+            <div class="result-bar">
+              <div class="bar-row">
+                <span class="bar-label">TRAD</span>
+                <span class="bar-track"><span class="bar-fill trad" style="width:100%"></span></span>
+                <span class="bar-num">260 <span class="bar-err">±5</span></span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">QBD</span>
+                <span class="bar-track"><span class="bar-fill qbd" style="width:54.9%"></span></span>
+                <span class="bar-num">143 <span class="bar-err">±5</span></span>
+              </div>
+            </div>
+            <div class="result-delta">−45.1%</div>
+          </div>
+
+          <div class="result-card">
+            <div class="result-metric">M6 · CtQ rubric (0–32)</div>
+            <div class="result-bar">
+              <div class="bar-row">
+                <span class="bar-label">TRAD</span>
+                <span class="bar-track"><span class="bar-fill trad" style="width:46.9%"></span></span>
+                <span class="bar-num">15.0 <span class="bar-err">±0.4</span></span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">QBD</span>
+                <span class="bar-track"><span class="bar-fill qbd" style="width:85%"></span></span>
+                <span class="bar-num">27.2</span>
+              </div>
+            </div>
+            <div class="result-delta">+81.4%</div>
+          </div>
+
         </div>
+        <figcaption>Figure 2. Per-metric arm comparison. n = 99 scenarios per arm. 1000-iteration bootstrap 95% confidence intervals. Welch t-test p &lt; 0.0001 across all six metrics.</figcaption>
+      </figure>
+
+      <h3>The layer breakdown matters more than the headline</h3>
+
+      <p>
+        The obvious reviewer question is whether the QbD lift hangs entirely on the seven hand-authored Layer A scenarios, whether, in other words, the author rigged the test. The split by layer addresses this directly.
+      </p>
+
+      <table class="table layer-result-table">
+        <thead>
+          <tr><th>Layer</th><th>n</th><th>TRAD M1 sub-total</th><th>QBD M1 sub-total</th><th>Δ%</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>A (hand-authored)</td><td class="num">7</td><td class="num">0.31</td><td class="num">0.18</td><td class="num delta">−41.9%</td></tr>
+          <tr><td>B (EMA-derived)</td><td class="num">38</td><td class="num">1.24</td><td class="num">0.78</td><td class="num delta">−37.1%</td></tr>
+          <tr><td>C (FDA BIMO + DCT)</td><td class="num">54</td><td class="num">1.77</td><td class="num">1.14</td><td class="num delta">−35.6%</td></tr>
+        </tbody>
+      </table>
+      <p class="caption">Table 4. M1 (amendments triggered) decomposed by scenario layer.</p>
+
+      <p>
+        Layer A shows the largest percentage reduction, which is unsurprising, those scenarios are the ones the QBD apparatus was designed against. Layers B and C are within a few percentage points of each other and of the all-scenario M1 reduction of 36.5%. The QbD lift holds up across regulator-derived scenarios that the author did not hand-pick. This is the cross-validation evidence.
+      </p>
+
+      <h3>The honest ties</h3>
+
+      <p>
+        Three scenarios show the two arms tying on decision and contribution: financial-disclosure scenarios (FD-001 and similar), audit-cycle scenarios (AU-002), and IP-accountability scenarios (IP-002). The QBD apparatus offers no advantage on these. Financial disclosure is a binary investigator-level event that no protocol apparatus can pre-authorise away. Audit cycle is an external regulator event that both arms must escalate. IP accountability has only a single tier of escalation under either apparatus. The ties are reported next to the wins because that is what intellectual honesty looks like.
+      </p>
+
+      <h3>What this is and what this is not</h3>
+
+      <p>
+        This is a methodology demonstration on a fully synthetic substrate. The headline numbers are calibrated rule-based estimates against published literature anchors. They are not a real-world clinical-trial result. The harness is rule-based and deterministic, not LLM-based or agent-based. Both protocols were authored by the same person; a more rigorous design would have two independent teams author the arms blind to each other with a third team scoring. The 99-scenario battery is a small subset of the published failure surface, the methodology supports any scenario count, and a future iteration can extend it. The pre-registration was declared in the methodology paper rather than time-stamped at a public registry before the scoring run; the commitment is to lodge a fully OSF-locked pre-registration before the next iteration.
+      </p>
+
+      <p>
+        What this is, a reproducible methodology that any sponsor can fork, swap in their own CtQ register and amendment decision tree, run against the same scenario battery, and report comparably. The contribution is the methodology plus the substrate plus the pre-registration discipline, not the specific GC-301 numbers. The harness is open. The scenario battery is open. The rubric is published. The pre-registration is forkable.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §7 The 99-scenario appendix (browseable)
+         ============================================================ -->
+    <section class="prose">
+      <h2><span class="section-no">VII.</span> The full ninety-nine scenarios</h2>
+      <p>
+        The complete scenario battery is below. Each row is one scenario, with its identifier, layer, family, the regulator finding it maps to, and the metrics it primarily affects. The filter accepts free text, try <code>monitoring</code>, <code>EMA</code>, <code>safety</code>, or a scenario ID like <code>BIMO-005</code>.
+      </p>
+    </section>
+
+    <section class="scenario-section">
+      <div class="scenario-controls">
+        <input type="search" id="scenario-search" placeholder="Filter scenarios by ID, family, or text…" aria-label="Filter scenarios" />
+        <span class="scenario-count" id="scenario-count">99 scenarios</span>
       </div>
-
-      <div class="mt-14 border-t border-gray-200 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-y-3 text-xs text-gray-500">
-        <p>&copy; 2026 Gourav Pandey. Methodology and code released open-source for research and educational use.</p>
-        <p>Built on the Mac mini with the help of Tailwind Plus components.</p>
+      <div class="scenario-table-wrap">
+        <table class="scenario-table" id="scenario-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Layer</th>
+              <th>Family</th>
+              <th>Source</th>
+              <th>What went wrong</th>
+              <th>Metrics</th>
+            </tr>
+          </thead>
+          <tbody id="scenario-tbody">
+            <!-- populated by app.js from data/placeholder.json -->
+          </tbody>
+        </table>
       </div>
-    </div>
-  </footer>
+    </section>
 
-  <!-- ============================================================
-       Mobile menu toggle (vanilla, ~5 lines)
-       ============================================================ -->
-  <script>
-    document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
-      document.getElementById('mobile-menu')?.classList.toggle('hidden');
-    });
-  </script>
+    <!-- ============================================================
+         §8 References
+         ============================================================ -->
+    <section class="prose references">
+      <h2><span class="section-no">VIII.</span> References</h2>
+      <ol class="reference-list">
+        <li id="ref-1">Getz K, et al. New Benchmarks Characterizing Protocol Amendment Practices, Trends and Their Impact on Clinical Trial Performance. <em>Therapeutic Innovation and Regulatory Science.</em> 2024. DOI 10.1007/s43441-024-00622-9.</li>
+        <li id="ref-2">Deloitte Insights. Measuring the return from pharmaceutical innovation 2024.</li>
+        <li id="ref-3">Botto E, et al. New Benchmarks on Protocol Amendment Experience in Oncology Clinical Trials. <em>TIRS.</em> 2024. DOI 10.1007/s43441-024-00629-2.</li>
+        <li id="ref-4">Cilley K, et al. Impact of Protocol Amendments, Personnel Experience and Social Determinants of Health on Protocol Deviations. <em>TIRS.</em> 2025. DOI 10.1007/s43441-025-00859-y.</li>
+        <li id="ref-5">European Medicines Agency. Good Clinical Practice Inspectors Working Group Annual Report 2024. EMA/INS/GCP/2025.</li>
+        <li id="ref-6">de Viron S, et al. Quality Improvement of Clinical Trial Conduct via Central Statistical Monitoring on 1676 Sites Across 212 Studies. <em>TIRS.</em> 2022. DOI 10.1007/s43441-022-00470-5.</li>
+        <li id="ref-7">Adams A, et al. Risk-Based Monitoring in Clinical Trials: 2021 Update. <em>TIRS.</em> 2023. DOI 10.1007/s43441-022-00496-9.</li>
+        <li id="ref-8">Stansbury N, et al. Risk-Based Monitoring in Clinical Trials: Increased Adoption Throughout 2020. <em>TIRS.</em> 2022. DOI 10.1007/s43441-022-00387-z.</li>
+        <li id="ref-9">Dirks A, et al. Comprehensive Assessment of Risk-Based Quality Management Adoption in Clinical Trials. <em>TIRS.</em> 2024. DOI 10.1007/s43441-024-00618-5.</li>
+        <li id="ref-10">Florez M, et al. Adoption Maturity Model for Risk-based Quality Management (RBQM) in Clinical Trials. <em>TIRS.</em> 2025. DOI 10.1007/s43441-025-00746-6.</li>
+        <li id="ref-11">Yamada O, et al. Effectiveness of remote risk-based monitoring. <em>Trials.</em> 2024. DOI 10.1186/s13063-024-08242-2.</li>
+        <li id="ref-12">Meeker-O'Connell A, et al. Enhancing clinical evidence by proactively building quality into clinical trials. <em>Clinical Trials.</em> 2016. DOI 10.1177/1740774516643491.</li>
+        <li id="ref-13">Alghabban A, et al. The UK 2026 Clinical Trial Regulations. <em>TIRS.</em> 2026. DOI 10.1007/s43441-026-00931-1.</li>
+        <li id="ref-14">Hsiue E, et al. Estimated costs of pivotal trials for U.S. FDA-approved cancer drugs, 2015–2017. <em>Clinical Trials.</em> 2020. DOI 10.1177/1740774520907609.</li>
+        <li id="ref-15">Smith ZP, et al. Protocol Design Variables Highly Correlated with Clinical Trial Performance. <em>TIRS.</em> 2022. DOI 10.1007/s43441-021-00370-0.</li>
+        <li id="ref-16">Chen J, et al. Decentralized Clinical Trials: A Statistical Perspective. <em>CTS.</em> 2024. DOI 10.1111/cts.70117.</li>
+        <li id="ref-17">Hernandez AF. Ensuring Virtual Vigilance in Decentralized Clinical Trials. <em>JAMA.</em> 2024. DOI 10.1001/jama.2024.22640.</li>
+        <li id="ref-18">Hanke S, et al. Operationalizing Decentralized Clinical Trials: RADIAL Proof of Concept. <em>CPT.</em> 2025. DOI 10.1002/cpt.70070.</li>
+        <li id="ref-19">Wang Y, et al. RAG for clinical-research-document factual and regulatory standards (InformBench). <em>JAMIA.</em> 2026. DOI 10.1093/jamia/ocaf174.</li>
+        <li id="ref-20">Bain &amp; Company. Front Line Insights: pharma R&amp;D productivity series, 2024.</li>
+        <li id="ref-21">McKinsey &amp; Company. Life Sciences Practice publications on R&amp;D productivity and trial transformation, 2024.</li>
+        <li id="ref-22">KPMG. Intelligent Life Sciences Report, 2025.</li>
+        <li id="ref-23">EY. Pulse of the Industry: Medical Technology Report, 2023.</li>
+        <li id="ref-24">BCG. Decentralized Clinical Trials adoption analyses, 2024.</li>
+        <li id="ref-25">PwC. Rethinking Clinical Design briefing, 2024.</li>
+        <li id="ref-26">Mayo Clinic Proceedings. Sehrawat O, et al. Data-Driven and Technology-Enabled Trial Innovations. 2023. DOI 10.1016/j.mayocp.2023.02.003.</li>
+        <li id="ref-27">FDA. Bioresearch Monitoring (BIMO) Inspection Metrics, FY2017–FY2024.</li>
+      </ol>
+      <p class="caption">Full bibliography of 76 references in the companion methodology paper. Open-source repository: <a href="https://github.com/gauravpandey36/qbd-experiment-viz" rel="noopener">github.com/gauravpandey36/qbd-experiment-viz</a>.</p>
+    </section>
 
-  <!-- Charts + panel logic -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="app.js?v=2026-06-09-tailwind"></script>
+    <!-- ============================================================
+         Colophon / footer
+         ============================================================ -->
+    <footer class="article-footer">
+      <p class="colophon">
+        Authored 9 June 2026 on a Mac mini. Set in Source Serif 4 and Newsreader. Open-source, MIT-licensed for code, CC-BY-4.0 for text. Forks, derivative work, and critique are encouraged.
+      </p>
+      <p class="footer-disclaimer">
+        All examples reference GeneriCorp Therapeutics, a fictional pharmaceutical company built specifically for research and educational purposes. No proprietary content from any current or prior employer is used or implied.
+      </p>
+    </footer>
+
+  </article>
+
+  <script src="app.js?v=2026-06-09-journal"></script>
 </body>
 </html>
