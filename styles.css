@@ -269,6 +269,48 @@ article {
   padding: 0 4px;
 }
 
+/* Inline infographic images (the 6 LinkedIn PNGs) */
+.inline-image {
+  max-width: var(--max-wide);
+  margin-left: calc((var(--max-prose) - var(--max-wide)) / 2);
+  margin-right: calc((var(--max-prose) - var(--max-wide)) / 2);
+}
+.inline-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--bg-tint);
+}
+@media (max-width: 900px) {
+  .inline-image {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Timeline SVG (Figure 1) */
+.timeline-figure {
+  background: var(--bg-tint);
+  padding: 28px 20px 24px;
+  border-radius: 2px;
+  border-top: 3px solid var(--accent-warm);
+  margin-left: calc((var(--max-prose) - var(--max-wide)) / 2);
+  margin-right: calc((var(--max-prose) - var(--max-wide)) / 2);
+  max-width: var(--max-wide);
+}
+.timeline-svg {
+  width: 100%;
+  height: auto;
+  max-width: 760px;
+  display: block;
+  margin: 0 auto;
+}
+@media (max-width: 900px) {
+  .timeline-figure { margin-left: 0; margin-right: 0; padding: 20px 14px 18px; }
+}
+
 /* Big-stat block (Figure 1) */
 .stat-block {
   background: var(--bg-tint);

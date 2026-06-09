@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Editorial serif (Source Serif 4) + display (Newsreader) + mono for numbers -->
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2026-06-09-journal" />
+  <link rel="stylesheet" href="styles.css?v=2026-06-09-journal-images" />
 </head>
 <body>
 
@@ -101,6 +101,64 @@
       <p>
         What R3 does <em>not</em> say is how to do this. The guideline gives the requirement. The how lives in the supporting documents, the eight Critical-to-Quality factor families enumerated by ICH E8(R1) and operationalised by the CTTI Quality-by-Design framework, and in whatever discipline the sponsor's protocol team brings to the exercise.
       </p>
+
+      <figure class="figure timeline-figure">
+        <svg viewBox="0 0 800 220" class="timeline-svg" aria-label="ICH E6 revision timeline 1996 to 2026">
+          <!-- Horizontal axis -->
+          <line x1="40" y1="120" x2="760" y2="120" stroke="#8a4b1c" stroke-width="1.5" />
+          <!-- Year ticks -->
+          <g font-family="Source Serif 4, Georgia, serif" font-size="12" fill="#6b6358" font-style="italic">
+            <text x="40"  y="190" text-anchor="middle">1996</text>
+            <text x="220" y="190" text-anchor="middle">2016</text>
+            <text x="340" y="190" text-anchor="middle">2021</text>
+            <text x="500" y="190" text-anchor="middle">Dec 2024</text>
+            <text x="620" y="190" text-anchor="middle">Sep 2025</text>
+            <text x="740" y="190" text-anchor="middle">Apr 2026</text>
+          </g>
+          <!-- Tick marks -->
+          <g stroke="#8a4b1c" stroke-width="1.5">
+            <line x1="40"  y1="115" x2="40"  y2="125" />
+            <line x1="220" y1="115" x2="220" y2="125" />
+            <line x1="340" y1="115" x2="340" y2="125" />
+            <line x1="500" y1="115" x2="500" y2="125" />
+            <line x1="620" y1="115" x2="620" y2="125" />
+            <line x1="740" y1="115" x2="740" y2="125" />
+          </g>
+          <!-- Dots -->
+          <g fill="#0b3a5a">
+            <circle cx="40"  cy="120" r="5" />
+            <circle cx="220" cy="120" r="5" />
+            <circle cx="340" cy="120" r="5" />
+            <circle cx="500" cy="120" r="7" fill="#8a4b1c" />
+            <circle cx="620" cy="120" r="5" />
+            <circle cx="740" cy="120" r="5" />
+          </g>
+          <!-- Event labels (above the axis) -->
+          <g font-family="Newsreader, Georgia, serif" font-size="14" fill="#1c1a17">
+            <text x="40"  y="95"  text-anchor="middle" font-weight="600">E6 R1</text>
+            <text x="220" y="95"  text-anchor="middle" font-weight="600">E6 R2</text>
+            <text x="340" y="95"  text-anchor="middle" font-weight="600">E8 R1</text>
+            <text x="500" y="95"  text-anchor="middle" font-weight="700">E6 R3</text>
+            <text x="620" y="95"  text-anchor="middle" font-weight="600">FDA adopts</text>
+            <text x="740" y="95"  text-anchor="middle" font-weight="600">MHRA Regs</text>
+          </g>
+          <g font-family="Source Serif 4, Georgia, serif" font-size="11" fill="#6b6358" font-style="italic">
+            <text x="40"  y="65" text-anchor="middle">procedural</text>
+            <text x="220" y="65" text-anchor="middle">risk-based monitoring</text>
+            <text x="340" y="65" text-anchor="middle">8 CtQ families canon</text>
+            <text x="500" y="50" text-anchor="middle">CHMP Step 5 adoption</text>
+            <text x="500" y="65" text-anchor="middle" font-weight="600" fill="#8a4b1c">principles + Annex 1</text>
+            <text x="620" y="65" text-anchor="middle">Step 5 guidance</text>
+            <text x="740" y="65" text-anchor="middle">UK statutory rewrite</text>
+          </g>
+        </svg>
+        <figcaption>Figure 1. Thirty years of ICH E6 revisions. Each predecessor was longer and more procedural than the last; R3 reversed the direction and put the burden on protocol design.</figcaption>
+      </figure>
+
+      <figure class="figure inline-image">
+        <img src="images/02_ctq_by_design.png" alt="The eight Critical-to-Quality factor families: Patient safety, Reliable results, Informed consent, Data integrity, Pharmacological understanding, Site capability, Vendor management, Adaptive protocol design." loading="lazy" />
+        <figcaption>Figure 2. The eight Critical-to-Quality factor families canonised by ICH E8(R1) and the CTTI Quality-by-Design framework. The QbD protocol body in this experiment operationalises all eight inside §11 of the protocol, with cross-references to companion registers.</figcaption>
+      </figure>
     </section>
 
     <!-- ============================================================
@@ -140,7 +198,12 @@
             <div class="big-stat-label">of amendments classified as "unavoidable" by sponsors</div>
           </div>
         </div>
-        <figcaption>Figure 1. Industry-wide protocol amendment burden, Phase I–IV. Source: Getz et al., Tufts CSDD, 2024<sup><a href="#ref-1">1</a></sup>.</figcaption>
+        <figcaption>Figure 3. Industry-wide protocol amendment burden, Phase I–IV. Source: Getz et al., Tufts CSDD, 2024<sup><a href="#ref-1">1</a></sup>.</figcaption>
+      </figure>
+
+      <figure class="figure inline-image">
+        <img src="images/01_problem_535k.png" alt="The $535,000 problem: median cost of a Phase 3 protocol amendment, with 3.3 amendments per trial, 76% prevalence, and 215 days of multi-version operation." loading="lazy" />
+        <figcaption>Figure 4. The amendment-cost anchor that the rest of the analysis builds on, drawn directly from Tufts CSDD 2024 benchmarking.</figcaption>
       </figure>
 
       <p>
@@ -225,6 +288,11 @@
       <p>
         The EMA's own GCP Inspectors Working Group draws this picture from the regulator side. The 2024 annual report enumerated 67 inspections producing 335 major and critical findings. <strong>81.8% of CRITICAL findings were sponsor-side</strong>, up from 63.9% in 2023<sup><a href="#ref-5">5</a></sup>. Trial Management was the second-largest finding category at 86 findings; within it, Monitoring alone accounted for 35. The interface where the failures concentrate is exactly the interface the QbD requirement is meant to govern.
       </p>
+
+      <figure class="figure inline-image">
+        <img src="images/03_ema_sponsor_responsibility.png" alt="81.8% of CRITICAL clinical-trial findings in the EMA GCP IWG 2024 report are sponsor-side, with Trial Management accounting for 86 of 335 findings and Monitoring alone accounting for 35." loading="lazy" />
+        <figcaption>Figure 5. EMA GCP Inspectors Working Group 2024 finding distribution. Sponsor-side concentration of CRITICAL findings rose from 63.9% in 2023 to 81.8% in 2024.</figcaption>
+      </figure>
     </section>
 
     <!-- ============================================================
@@ -272,6 +340,11 @@
       <p>
         The Layer A scenarios are necessarily author-specific. Anyone running the same methodology elsewhere would write their own Layer A from their own experience. Layers B and C are extractable from public regulator catalogues and can be reproduced by any group with access to those catalogues. The full battery is published as JSON in the open-source repository and is browseable at the end of this article.
       </p>
+
+      <figure class="figure inline-image">
+        <img src="images/05_rbm_evidence_base.png" alt="Three RBM evidence anchors: de Viron 2022 (82.9% KRI improvement at 1,676 sites), Adams 2023 ACRO (RBM adoption rose 53% to 77% to 88% across 4,889 trials), and Yamada 2024 (remote RBM detected 100% of critical data errors on 4,645 data points)." loading="lazy" />
+        <figcaption>Figure 6. The risk-based-monitoring evidence base. These three anchors are what license the pre-registered M2 ≥30% reduction threshold as moderate (not aggressive) given current literature.</figcaption>
+      </figure>
     </section>
 
     <!-- ============================================================
@@ -283,6 +356,11 @@
       <p>
         The substrate for the comparison is GeneriCorp Therapeutics GC-301, a fictional anti-IL-17A IgG1 monoclonal antibody in Phase 2b for moderate-to-severe plaque psoriasis. Three-arm, double-blind, placebo-controlled, n ≈ 360 across 45 sites, twelve-week primary endpoint of PASI 75 response rate. The science is held identical between the two arms.
       </p>
+
+      <figure class="figure inline-image">
+        <img src="images/04_experiment_overview.png" alt="The experiment in one image: same molecule (GC-301 Phase 2b) splits into two arms (TRAD vs QBD), both run against the 99-scenario battery, scored on six pre-registered metrics M1 to M6, producing one head-to-head answer." loading="lazy" />
+        <figcaption>Figure 7. The experiment design in one image. Scientific design held identical; only the quality apparatus differs.</figcaption>
+      </figure>
 
       <div class="comparison-table-wrap">
         <table class="table compare-table">
@@ -487,7 +565,7 @@
           </div>
 
         </div>
-        <figcaption>Figure 2. Per-metric arm comparison. n = 99 scenarios per arm. 1000-iteration bootstrap 95% confidence intervals. Welch t-test p &lt; 0.0001 across all six metrics.</figcaption>
+        <figcaption>Figure 8. Per-metric arm comparison. n = 99 scenarios per arm. 1000-iteration bootstrap 95% confidence intervals. Welch t-test p &lt; 0.0001 across all six metrics.</figcaption>
       </figure>
 
       <h3>The layer breakdown matters more than the headline</h3>
@@ -527,6 +605,11 @@
       <p>
         What this is, a reproducible methodology that any sponsor can fork, swap in their own CtQ register and amendment decision tree, run against the same scenario battery, and report comparably. The contribution is the methodology plus the substrate plus the pre-registration discipline, not the specific GC-301 numbers. The harness is open. The scenario battery is open. The rubric is published. The pre-registration is forkable.
       </p>
+
+      <figure class="figure inline-image">
+        <img src="images/06_what_you_can_do.png" alt="What you can do with this methodology: fork the repo, author your own CtQ register, run the harness against the same 99-scenario battery, report comparably." loading="lazy" />
+        <figcaption>Figure 9. The three-step invitation. The methodology is reproducible; the scenario battery is public; the harness is open. Fork it and run it on your own protocol.</figcaption>
+      </figure>
     </section>
 
     <!-- ============================================================
@@ -614,6 +697,6 @@
 
   </article>
 
-  <script src="app.js?v=2026-06-09-journal"></script>
+  <script src="app.js?v=2026-06-09-journal-images"></script>
 </body>
 </html>
