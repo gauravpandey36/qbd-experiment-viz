@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Methodology · QbD Experiment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">QbD</span>
+        <span class="brand-text">
+          <strong>QbD Experiment</strong>
+          <em>GC-301 Phase 2b · Synthetic</em>
+        </span>
+      </a>
+      <nav>
+        <a href="index.html#panel-1">Scenarios</a>
+        <a href="index.html#panel-2">Metrics</a>
+        <a href="index.html#panel-3">Cost model</a>
+        <a href="index.html#panel-4">CtQ rubric</a>
+        <a href="index.html#panel-5">Layer breakdown</a>
+        <a href="methodology.html">Methodology</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-inner">
+      <span class="hero-eyebrow">Methodology stub</span>
+      <h1>Pre-registered protocol &mdash; full methods paper</h1>
+      <p class="hero-lead">
+        This page is a placeholder for the methodology paper that accompanies the visualization site.
+        The full pre-registered protocol (scenario authoring rules, blinded rubric, simulator harness,
+        scoring procedure, cost-model derivation) will land here on Phase&nbsp;6.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-kicker">Methods overview</div>
+        <h2>Six pillars of the experiment</h2>
+      </div>
+
+      <div class="card">
+        <h3>1. Two arms, one synthetic dossier</h3>
+        <p>Both arms draft against the same fictional GC-301 Phase 2b psoriasis study under ICH E6(R3). Arm A is traditional protocol authoring; Arm B operationalizes E6(R3)&rsquo;s Critical-to-Quality (CtQ) factor register inside the protocol body, with companion documents (CtQ register, risk-tier table, decision tree D7).</p>
+      </div>
+
+      <div class="card">
+        <h3>2. The 100-scenario battery</h3>
+        <p>Layer A: 7 hand-authored scenarios derived from Gourav&rsquo;s 15-year operational experience. Layer B: 42 LLM-generated scenarios seeded on the post-2024 RBM, DCT, and amendment-driver literature. Layer C: 51 scenarios mined directly from peer-reviewed and regulator-published case studies. All 100 are scored against each arm.</p>
+      </div>
+
+      <div class="card">
+        <h3>3. Six pre-registered metrics</h3>
+        <p>M1 amendments triggered; M2 queries per CRF page; M3 patient-impacting deviations per 100 patients; M4 amendment cost (USD); M5 need-to-amend cycle (days); M6 CtQ rubric quality (0&ndash;32, blinded triplicate scoring).</p>
+      </div>
+
+      <div class="card">
+        <h3>4. Blinded triplicate rubric scoring</h3>
+        <p>32-cell rubric: 8 CtQ families &times; 4 score levels (Absent / Mentioned / Defined / Operationalized). Three independent blinded reviewers; inter-rater agreement reported; ties resolved by adjudication.</p>
+      </div>
+
+      <div class="card">
+        <h3>5. Cost model</h3>
+        <p>Anchored on Getz / Tufts CSDD 2024 (Phase 3 amendment cost $535K, Phase 2b derate $320K), 22-site network at $85K/week per-site burn, and a 475-day full amendment cycle (215 days need-to-amend + 260 days implementation-to-approval).</p>
+      </div>
+
+      <div class="card">
+        <h3>6. Pre-registration + open data</h3>
+        <p>Protocol, scenario battery, rubric, scoring procedure, and simulator harness are pre-registered before Phase 4 simulation. All inputs and outputs ship on the public repository under a permissive license.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="col">
+        <strong>QbD Experiment</strong>
+        <span>Methodology paper for Gourav Pandey&rsquo;s ICH E6(R3) Critical-to-Quality operationalization study, GC-301 Phase 2b synthetic dossier.</span>
+      </div>
+      <div class="col">
+        <strong>Source data</strong>
+        <span>See <a href="index.html">/index</a> for the interactive results. Paper repo: <a href="#">github.com/&hellip; (link placeholder)</a>.</span>
+      </div>
+      <div class="col">
+        <strong>Synthetic-data disclaimer</strong>
+        <span class="disclaimer">All examples reference GeneriCorp Therapeutics, a fictional pharmaceutical company built specifically for research and educational purposes. No proprietary content from any current or prior employer is used or implied.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

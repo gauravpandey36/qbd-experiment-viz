@@ -1,0 +1,18 @@
+# Backups from local rebuilds — not for public consumption
+*.bak_pre_*
+*.bak
+*.orig
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local dev artifacts
+node_modules/
+.parcel-cache/
+.cache/
+
+# Capture endpoint helper output (one-off Tailwind component cache; lives outside site dir)

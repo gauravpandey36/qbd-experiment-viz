@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QbD Experiment · GC-301 Phase 2b · Interactive Results</title>
+  <meta name="description" content="Interactive visualization of a Quality-by-Design (QbD) operationalization of ICH E6(R3) Critical-to-Quality factors against a traditional protocol arm, on a fictional GC-301 Phase 2b dossier." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind v4 CDN: enables all Tailwind utility classes used by the Tailwind Plus components below. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Brand-palette overrides so we can use familiar Tailwind names with our pharma brand colors.
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50:'#eef7fb', 100:'#d6ecf3', 500:'#0f6e9c', 600:'#0b4a6f', 700:'#093c5a', 900:'#072c44' },
+            accent: { 400:'#2dd4bf', 500:'#14b8a6', 600:'#0d9488' }
+          },
+          fontFamily: {
+            sans: ['Inter','ui-sans-serif','system-ui','sans-serif'],
+            mono: ['"JetBrains Mono"','ui-monospace','monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Existing custom styles (panel-specific: scenario cards, heatmap, cost-row, etc.) -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="font-sans antialiased text-gray-900 bg-white">
+
+  <!-- ============================================================
+       ANNOUNCEMENT BANNER (slim strip above the header)
+       ============================================================ -->
+  <div class="bg-brand-600 text-white">
+    <div class="mx-auto max-w-7xl px-6 py-2.5 lg:px-8 flex items-center justify-center gap-x-3 text-sm/6">
+      <span class="inline-flex items-center rounded-full bg-accent-500/20 px-2.5 py-0.5 text-xs font-semibold text-accent-400 ring-1 ring-inset ring-accent-500/30">v1</span>
+      <span class="hidden sm:inline">Pre-registered methodology paper posted with full harness, scenario battery, and 76 references.</span>
+      <span class="sm:hidden">Methodology paper v1 posted</span>
+      <a href="methodology.html" class="font-semibold underline-offset-2 hover:underline">Read it <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       HEADER  (Tailwind Plus 'with right-aligned nav', adapted)
+       ============================================================ -->
+  <header class="bg-white sticky top-0 z-50 border-b border-gray-200/80 backdrop-blur supports-[backdrop-filter]:bg-white/85">
+    <nav aria-label="Global" class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8">
+      <a href="#top" class="-m-1.5 p-1.5 flex items-center gap-x-3">
+        <span class="sr-only">QbD Experiment</span>
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-white font-bold tracking-tight">Q</span>
+        <span class="leading-tight">
+          <span class="block text-sm font-semibold text-gray-900">QbD Experiment</span>
+          <span class="block text-[11px] uppercase tracking-[0.14em] text-gray-500">GC-301 Phase 2b · Synthetic</span>
+        </span>
+      </a>
+      <div class="flex lg:hidden">
+        <button type="button" id="mobile-menu-button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+          <span class="sr-only">Open main menu</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" class="size-6">
+            <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-10">
+        <a href="#panel-1" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Scenarios</a>
+        <a href="#panel-2" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Metrics</a>
+        <a href="#panel-3" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Cost model</a>
+        <a href="#panel-4" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">CtQ rubric</a>
+        <a href="#panel-5" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Layer breakdown</a>
+        <a href="methodology.html" class="text-sm/6 font-medium text-gray-700 hover:text-brand-600 transition-colors">Methodology</a>
+      </div>
+    </nav>
+    <!-- Mobile menu (toggled by JS at bottom of file) -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-200">
+      <div class="space-y-1 px-4 py-3">
+        <a href="#panel-1" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Scenarios</a>
+        <a href="#panel-2" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Metrics</a>
+        <a href="#panel-3" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Cost model</a>
+        <a href="#panel-4" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">CtQ rubric</a>
+        <a href="#panel-5" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Layer breakdown</a>
+        <a href="methodology.html" class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50">Methodology</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       HERO  (Tailwind Plus 'simple centered', re-tuned: no gradient
+       blobs, pharma-restraint palette, real eyebrow + lead)
+       ============================================================ -->
+  <section id="top" class="relative isolate overflow-hidden bg-white">
+    <!-- Subtle background grid (replaces the consumer-tech gradient blobs) -->
+    <svg aria-hidden="true" class="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(60rem_50rem_at_top,white,transparent)]">
+      <defs>
+        <pattern id="grid-bg" width="80" height="80" x="50%" y="-1" patternUnits="userSpaceOnUse">
+          <path d="M.5 200V.5H200" fill="none"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" stroke-width="0" fill="url(#grid-bg)"/>
+    </svg>
+
+    <div class="mx-auto max-w-3xl px-6 pt-20 pb-16 sm:pt-28 sm:pb-24 lg:pt-32 lg:pb-28 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-x-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-700 ring-1 ring-inset ring-brand-600/20 bg-brand-50">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent-500"></span>
+        Pre-registered methodology experiment
+      </div>
+      <h1 class="mt-6 text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+        Does a Quality-by-Design protocol body actually outperform a traditional one under ICH&nbsp;E6(R3)?
+      </h1>
+      <p class="mt-6 text-pretty text-base/7 text-gray-600 sm:text-lg/8 max-w-2xl mx-auto">
+        Two arms of the same synthetic GC-301 Phase 2b psoriasis study, stress-tested against 99 protocol-change
+        scenarios drawn from EMA GCP IWG 2024, FDA BIMO FY17–FY24, and the post-2024 RBM / DCT / amendment-driver
+        literature. Arm A follows current industry-traditional drafting. Arm B operationalizes E6(R3)'s
+        Critical-to-Quality factor register inside the protocol body.
+      </p>
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <a href="#panel-2" class="rounded-md bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 transition-colors">
+          See the six metrics
+        </a>
+        <a href="#panel-3" class="rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-colors">
+          Try the cost model
+        </a>
+        <a href="methodology.html" class="text-sm font-semibold text-brand-600 hover:text-brand-500 transition-colors">
+          Read the paper <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HEADLINE STATS BAND
+       6 pre-registered metrics, TRAD → QBD, with deltas + sources.
+       (Hardcoded from harness/results/comparison_dataset.json.
+        app.js no longer needs to populate this; it is static.)
+       ============================================================ -->
+  <section class="bg-gray-50 border-y border-gray-200/80">
+    <div class="mx-auto max-w-7xl px-6 py-14 sm:py-20 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="text-sm font-semibold uppercase tracking-[0.14em] text-brand-600">Headline result</h2>
+        <p class="mt-2 text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">
+          All three pre-registered thresholds met. <span class="text-gray-500 font-normal">n = 99 per arm · Welch p &lt; 0.0001 across the board.</span>
+        </p>
+      </div>
+
+      <dl id="hero-stats" class="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-px overflow-hidden rounded-2xl bg-gray-200/80 text-center sm:max-w-none sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <!-- M1 -->
+        <div class="flex flex-col bg-white px-6 py-7">
+          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M1 · Amendments / protocol</dt>
+          <dd class="order-first">
+            <div class="flex items-baseline justify-center gap-x-2 font-mono">
+              <span class="text-2xl text-gray-400 line-through">3.32</span>
+              <span class="text-3xl font-semibold tracking-tight text-gray-900">2.11</span>
+            </div>
+            <div class="mt-1 text-sm font-semibold text-accent-600">−36.5%</div>
+          </dd>
+          <dt class="mt-3 text-[11px] text-gray-400">Getz 2024</dt>
+        </div>
+        <!-- M2 -->
+        <div class="flex flex-col bg-white px-6 py-7">
+          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M2 · Queries / page</dt>
+          <dd class="order-first">
+            <div class="flex items-baseline justify-center gap-x-2 font-mono">
+              <span class="text-2xl text-gray-400 line-through">7.96</span>
+              <span class="text-3xl font-semibold tracking-tight text-gray-900">5.29</span>
+            </div>
+            <div class="mt-1 text-sm font-semibold text-accent-600">−33.5%</div>
+          </dd>
+          <dt class="mt-3 text-[11px] text-gray-400">de Viron 2022</dt>
+        </div>
+        <!-- M3 -->
+        <div class="flex flex-col bg-white px-6 py-7">
+          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M3 · Deviations / 100 pts</dt>
+          <dd class="order-first">
+            <div class="flex items-baseline justify-center gap-x-2 font-mono">
+              <span class="text-2xl text-gray-400 line-through">11.99</span>
+              <span class="text-3xl font-semibold tracking-tight text-gray-900">5.70</span>
+            </div>
+            <div class="mt-1 text-sm font-semibold text-accent-600">−52.4%</div>
+          </dd>
+          <dt class="mt-3 text-[11px] text-gray-400">Cilley 2025</dt>
+        </div>
+        <!-- M4 -->
+        <div class="flex flex-col bg-white px-6 py-7">
+          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M4 · Amendment cost</dt>
+          <dd class="order-first">
+            <div class="flex items-baseline justify-center gap-x-2 font-mono">
+              <span class="text-2xl text-gray-400 line-through">$536K</span>
+              <span class="text-3xl font-semibold tracking-tight text-gray-900">$250K</span>
+            </div>
+            <div class="mt-1 text-sm font-semibold text-accent-600">−53.4%</div>
+          </dd>
+          <dt class="mt-3 text-[11px] text-gray-400">Tufts CSDD</dt>
+        </div>
+        <!-- M5 -->
+        <div class="flex flex-col bg-white px-6 py-7">
+          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M5 · Need-to-amend cycle</dt>
+          <dd class="order-first">
+            <div class="flex items-baseline justify-center gap-x-2 font-mono">
+              <span class="text-2xl text-gray-400 line-through">260d</span>
+              <span class="text-3xl font-semibold tracking-tight text-gray-900">143d</span>
+            </div>
+            <div class="mt-1 text-sm font-semibold text-accent-600">−45.1%</div>
+          </dd>
+          <dt class="mt-3 text-[11px] text-gray-400">Tufts / D7 target</dt>
+        </div>
+        <!-- M6 -->
+        <div class="flex flex-col bg-white px-6 py-7">
+          <dt class="text-xs/6 font-semibold uppercase tracking-wide text-gray-500">M6 · CtQ rubric (0–32)</dt>
+          <dd class="order-first">
+            <div class="flex items-baseline justify-center gap-x-2 font-mono">
+              <span class="text-2xl text-gray-400 line-through">15.0</span>
+              <span class="text-3xl font-semibold tracking-tight text-gray-900">27.2</span>
+            </div>
+            <div class="mt-1 text-sm font-semibold text-accent-600">+81.4%</div>
+          </dd>
+          <dt class="mt-3 text-[11px] text-gray-400">Triplicate scoring</dt>
+        </div>
+      </dl>
+
+      <p class="mx-auto mt-8 max-w-2xl text-center text-sm text-gray-500">
+        Pre-registered thresholds: ≥30% on M1+M2, ≥50% on M3. All met. 1000-iteration bootstrap CIs.
+        Old → new values shown with strike-through; full source data on
+        <a class="font-semibold text-brand-600 hover:text-brand-500" href="methodology.html">methodology page</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANEL 1: SCENARIO DIFF
+       (Unchanged from prior version; app.js populates #scenario-grid)
+       ============================================================ -->
+  <section class="section" id="panel-1">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-kicker">Panel 1 · Show-the-work</div>
+        <h2>Scenario-by-scenario decision diff</h2>
+        <p>
+          For each protocol-change scenario, what would the traditional arm decide (amendment / monitor / no-action)
+          versus the QbD arm's walk through decision tree D7? Filter by family to interrogate where the lift comes from.
+        </p>
+      </div>
+      <div class="filter-bar" id="scenario-filters"></div>
+      <div class="scenario-grid" id="scenario-grid"></div>
+      <p class="caption" style="margin-top:18px; color:var(--ink-muted); font-size:12.5px;">
+        99 scenarios across Layer A (7 hand-authored), Layer B (38 EMA-derived), Layer C (54 FDA BIMO + DCT).
+        Real harness output from <code>harness/run_harness.py</code>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANEL 2: METRIC COMPARISON (canvas charts via app.js)
+       ============================================================ -->
+  <section class="section section-tint" id="panel-2">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-kicker">Panel 2 · Per-metric arm comparison</div>
+        <h2>Six pre-registered metrics, side by side</h2>
+        <p>
+          M1–M5 are derived from the 99-scenario battery. M6 is the structural quality rubric.
+          Error bars reflect 1000-iteration bootstrap CIs from the deterministic harness.
+        </p>
+      </div>
+      <div class="chart-grid" id="metric-charts"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANEL 3: COST MODEL  (live sliders; app.js handles math)
+       ============================================================ -->
+  <section class="section" id="panel-3">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-kicker">Panel 3 · Interactive cost model</div>
+        <h2>Stress-test the financial assumptions yourself</h2>
+        <p>
+          All four levers (Tufts amendment cost, per-site burn rate, amendment cycle days, site count) are live.
+          M4 (cost delta) and M5 (duration delta) recompute on every input.
+        </p>
+      </div>
+
+      <div class="cost-layout">
+        <div class="card">
+          <h3>Assumptions</h3>
+
+          <div class="slider-row">
+            <label>Amendment cost per protocol amendment (USD)
+              <span class="val" id="v-amend-cost">$535,000</span>
+            </label>
+            <input type="range" id="s-amend-cost" min="100000" max="700000" step="5000" value="535000" />
+          </div>
+
+          <div class="slider-row">
+            <label>Per-site weekly burn rate (USD)
+              <span class="val" id="v-burn">$85,000</span>
+            </label>
+            <input type="range" id="s-burn" min="20000" max="150000" step="1000" value="85000" />
+          </div>
+
+          <div class="slider-row">
+            <label>Amendment full-cycle days (need&rarr;approval)
+              <span class="val" id="v-cycle">475</span>
+            </label>
+            <input type="range" id="s-cycle" min="120" max="700" step="5" value="475" />
+          </div>
+
+          <div class="slider-row">
+            <label>Active site count
+              <span class="val" id="v-sites">22</span>
+            </label>
+            <input type="range" id="s-sites" min="4" max="80" step="1" value="22" />
+          </div>
+
+          <p class="caption">
+            Defaults from Getz/Tufts CSDD 2024 amendment-economics anchors. Per-site burn from CRO RFI benchmarks.
+            Cycle days = 215 (multi-version) + 260 (need-to-approval) per Tufts CSDD.
+          </p>
+        </div>
+
+        <div class="cost-output">
+          <h4>Recomputed M4 + M5</h4>
+          <div class="cost-row">
+            <span class="k">Total amendment cost, Traditional arm</span>
+            <span class="v" id="o-trad-total">&mdash;</span>
+          </div>
+          <div class="cost-row">
+            <span class="k">Total amendment cost, QbD arm</span>
+            <span class="v" id="o-qbd-total">&mdash;</span>
+          </div>
+          <div class="cost-row">
+            <span class="k">M4, cost delta (USD)</span>
+            <span class="v" id="o-delta-cost">&mdash;</span>
+          </div>
+          <div class="cost-row">
+            <span class="k">M4, cost delta (%)</span>
+            <span class="v" id="o-delta-pct">&mdash;</span>
+          </div>
+          <div class="cost-row">
+            <span class="k">M5, duration delta (days saved)</span>
+            <span class="v" id="o-delta-days">&mdash;</span>
+          </div>
+          <div class="cost-row">
+            <span class="k">Burn-rate savings @ delta-days &times; sites</span>
+            <span class="v" id="o-burn-save">&mdash;</span>
+          </div>
+          <p class="caption" style="margin-top:14px;">
+            Traditional arm baseline: 3.3 amendments / protocol (Getz 2024). QbD arm: 2.0 (mid of the &ge;30%
+            regulatory commitment and the RBM-evidence 50% ceiling). All numbers regenerate live.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANEL 4: RUBRIC HEATMAP  (app.js populates #heatmap-trad/qbd)
+       ============================================================ -->
+  <section class="section section-tint" id="panel-4">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-kicker">Panel 4 · CtQ rubric heat map</div>
+        <h2>Where does the QbD lift actually live?</h2>
+        <p>
+          32 cells: 8 Critical-to-Quality families &times; 4 score levels (0=Absent, 1=Mentioned,
+          2=Defined, 3=Operationalized). Both arms shown side by side.
+        </p>
+      </div>
+
+      <div class="heatmap-layout">
+        <div class="card">
+          <div class="heatmap-title">Traditional arm</div>
+          <div class="heatmap" id="heatmap-trad"></div>
+        </div>
+        <div class="card">
+          <div class="heatmap-title">QbD arm</div>
+          <div class="heatmap" id="heatmap-qbd"></div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span><span class="swatch" style="background:#f1f5f9"></span>0 Absent</span>
+        <span><span class="swatch" style="background:rgba(20,184,166,0.18)"></span>1 Mentioned</span>
+        <span><span class="swatch" style="background:rgba(20,184,166,0.45)"></span>2 Defined</span>
+        <span><span class="swatch" style="background:rgba(11,74,111,0.85)"></span>3 Operationalized</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PANEL 5: LAYER BREAKDOWN (Chart.js canvas #layer-chart)
+       ============================================================ -->
+  <section class="section" id="panel-5">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-kicker">Panel 5 · Generalization</div>
+        <h2>Does the lift hold beyond the seven hand-authored scenarios?</h2>
+        <p>
+          M1 (amendments triggered) split by scenario provenance: Layer A (hand-authored, n=7),
+          Layer B (EMA-derived, n=38), Layer C (FDA BIMO + DCT, n=54). The QbD lift should be stable across layers.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Amendments per protocol, by scenario layer</h3>
+        <div class="chart-wrap"><canvas id="layer-chart" height="220"></canvas></div>
+        <p class="caption">Both arms shown for each layer. A flat QbD line across layers is the "real lift, not just hand-cherry-picked" signature.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER (Tailwind Plus 4-column simple, adapted)
+       ============================================================ -->
+  <footer class="bg-white border-t border-gray-200/80">
+    <div class="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+      <div class="xl:grid xl:grid-cols-3 xl:gap-8">
+        <div class="space-y-4">
+          <a href="#top" class="-m-1.5 p-1.5 flex items-center gap-x-3">
+            <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-accent-500 text-white font-bold tracking-tight">Q</span>
+            <span class="leading-tight">
+              <span class="block text-base font-semibold text-gray-900">QbD Experiment</span>
+              <span class="block text-[11px] uppercase tracking-[0.14em] text-gray-500">GC-301 Phase 2b · Synthetic</span>
+            </span>
+          </a>
+          <p class="text-sm/6 text-gray-600 max-w-sm">
+            Methodology paper for Gourav Pandey's ICH E6(R3) Critical-to-Quality operationalization study,
+            GC-301 Phase 2b synthetic dossier.
+          </p>
+        </div>
+
+        <div class="mt-12 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm/6 font-semibold text-gray-900">Explore</h3>
+              <ul role="list" class="mt-5 space-y-3">
+                <li><a href="#panel-1" class="text-sm/6 text-gray-600 hover:text-brand-600">Scenarios</a></li>
+                <li><a href="#panel-2" class="text-sm/6 text-gray-600 hover:text-brand-600">Metrics</a></li>
+                <li><a href="#panel-3" class="text-sm/6 text-gray-600 hover:text-brand-600">Cost model</a></li>
+                <li><a href="#panel-4" class="text-sm/6 text-gray-600 hover:text-brand-600">CtQ rubric</a></li>
+                <li><a href="#panel-5" class="text-sm/6 text-gray-600 hover:text-brand-600">Layer breakdown</a></li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm/6 font-semibold text-gray-900">Paper</h3>
+              <ul role="list" class="mt-5 space-y-3">
+                <li><a href="methodology.html" class="text-sm/6 text-gray-600 hover:text-brand-600">Methodology paper</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Pre-registration (OSF, planned)</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Reference list (76)</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm/6 font-semibold text-gray-900">Open source</h3>
+              <ul role="list" class="mt-5 space-y-3">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Scenario battery (JSON)</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Harness (Python)</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">Both protocols</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-brand-600">GitHub repo (placeholder)</a></li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm/6 font-semibold text-gray-900">Disclaimer</h3>
+              <p class="mt-5 text-xs/6 text-gray-500">
+                All examples reference GeneriCorp Therapeutics, a fictional pharmaceutical company built
+                specifically for research and educational purposes. No proprietary content from any current or
+                prior employer is used or implied.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-14 border-t border-gray-200 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-y-3 text-xs text-gray-500">
+        <p>&copy; 2026 Gourav Pandey. Methodology and code released open-source for research and educational use.</p>
+        <p>Built on the Mac mini with the help of Tailwind Plus components.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       Mobile menu toggle (vanilla, ~5 lines)
+       ============================================================ -->
+  <script>
+    document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+  </script>
+
+  <!-- Charts + panel logic -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="app.js?v=2026-06-09-tailwind"></script>
+</body>
+</html>
