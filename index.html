@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Editorial serif (Source Serif 4) + display (Newsreader) + mono for numbers -->
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=2026-06-09-bloomberg" />
+  <link rel="stylesheet" href="styles.css?v=2026-06-09-integration" />
 </head>
 <body>
 
@@ -647,10 +647,91 @@
     </section>
 
     <!-- ============================================================
-         §8 References
+         §8 How to do this on your own data (integration)
+         ============================================================ -->
+    <section class="prose" id="part-8">
+      <h2><span class="section-no">VIII.</span> How to do this on your own data</h2>
+      <p>
+        The methodology in this article is portable. The harness, the rubric, the scenario battery, and the protocols are open. What follows is a working map from a real sponsor's enterprise systems to the inputs the harness expects, and a three-step adoption path that almost any clinical operations group can run in a single quarter.
+      </p>
+      <p>
+        The honest framing is that most sponsors do not need to dump every system to a Python harness. They need to do three things. First, mine their own amendment history from EDC and CTMS to calibrate the M1 through M5 anchors to their own baseline rather than relying on the Tufts $535,000 number. Second, author a Critical-to-Quality register against the eight CTTI / E8(R1) families in their own house style, then version-control it the same way they version-control protocols. Third, run the rule-based harness with their own calibration numbers and their own additional scenarios.
+      </p>
+
+      <figure class="inline-image">
+        <img src="images/08_integration_map.png" alt="Integration map showing which sponsor enterprise systems (Veeva Vault, Medidata Rave, Oracle InForm, Veeva CTMS, Cyntegrity/CluePoints/Medidata Detect, ERP/Finance) feed which harness inputs (protocol artifact, EDC change logs, query rates, deviation logs, RBM KRI catalogue, amendment-cycle timestamps, finance-side amendment cost)." loading="lazy" />
+        <figcaption>Figure 7. The integration map. Which enterprise system you mine for each of the six harness inputs. None of these exports requires a vendor escalation. The data is already in your stack.</figcaption>
+      </figure>
+
+      <p>
+        The mapping is straightforward in principle and tedious in practice. Most sponsors carry the right data in the right systems already. What is missing is not the data. It is the apparatus that turns the data into a comparable methodology.
+      </p>
+      <p>
+        A few practical adoption notes. Veeva Vault Clinical, MasterControl, and Documentum exports give you the protocol artefact. Medidata Rave, Veeva CDB, and Oracle InForm hand you EDC change logs and query rates. Risk-based monitoring platforms like Cyntegrity, CluePoints, Medidata Detect, and Saama already publish the KRI / KQI catalogue your QbD arm needs. The CTMS amendment-cycle timestamps are usually the missing link, and they live in either Veeva CTMS or a home-grown SharePoint workflow. None of those exports requires a vendor escalation.
+      </p>
+
+      <p><strong>Three-step adoption path</strong></p>
+
+      <ol class="adoption-steps">
+        <li>
+          <strong>Calibrate to your own baseline.</strong>
+          Pull six fiscal years of amendment history from your EDC and CTMS. Compute your sponsor-specific median amendment cost (M4), your sponsor-specific need-to-amend cycle in days (M5), and your sponsor-specific patient-impacting deviation rate per hundred participants (M3). Replace the Tufts anchors with your own. The harness reads these calibration numbers from a single JSON file; the swap is one line.
+        </li>
+        <li>
+          <strong>Author your own CtQ register.</strong>
+          Fifteen to twenty-five pages, in Word or markdown, against the eight CTTI families. The published register is a template, not a constraint. Use your own QTLs, your own risk thresholds, your own escalation triggers. Cross-reference each family to the EMA 2024 finding sub-category it controls and to the FDA BIMO finding category it controls. Keep the language plain enough that your investigator at the lowest-enrolling site can read it.
+        </li>
+        <li>
+          <strong>Run the harness against the 99-scenario battery, plus your own additions.</strong>
+          Layer A is necessarily idiosyncratic. Add your own Layer A scenarios from your sponsor's last five years of inspection findings. The harness scoring is rule-based and deterministic, so adding scenarios does not change the harness logic, only the scoring rollup. Re-run, compare, ship the result to your Quality Council with the same auditability discipline you would ship a CAPA effectiveness check.
+        </li>
+      </ol>
+
+      <p>
+        The contribution is the methodology plus the substrate plus the pre-registration discipline. The numbers are yours.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §9 What this battery does not yet cover
+         ============================================================ -->
+    <section class="prose" id="part-9">
+      <h2><span class="section-no">IX.</span> What this battery does not yet cover</h2>
+      <p>
+        The 99-scenario battery is a deliberately small first cut. It maps cleanly to the EMA GCP IWG and FDA BIMO finding catalogues because those are the most complete public regulator sources. It leaves several real-world failure modes off the table. Naming them explicitly is the right thing to do, both because the reader deserves to know the methodology's blind spots and because anyone forking the battery will want a roadmap of what to add.
+      </p>
+      <p>
+        Twelve failure modes I have not scored.
+      </p>
+
+      <ol class="gap-list">
+        <li><strong>Supply-chain shocks at the IMP level.</strong> Cold-chain breach in transit, comparator stockout mid-study, label and booklet errata that trigger a global recall window. These intersect with Good Clinical Practice at the IMP accountability boundary but are Chemistry, Manufacturing, and Controls primary. The 99-scenario battery is GCP-centric and treats CMC events only when they cross into protocol amendment territory.</li>
+        <li><strong>eConsent technology failures.</strong> Vendor platform outage, version-control bug, multi-jurisdictional language drift that puts a Texas site on a different consent version than a German site for forty-eight hours. Scenario A-004 touches DCT vendor failure broadly. eConsent-specific cases deserve their own family.</li>
+        <li><strong>Mid-trial statistical-analysis-plan changes.</strong> Blinding break, interim-analysis trigger, primary endpoint redefinition, adaptive-design futility-stop invocation. The battery has five CSR and Statistics scenarios but these big-bang events do not fit the per-scenario rubric well and need their own scoring lane.</li>
+        <li><strong>Pharmacovigilance signal escalation cascades.</strong> Beyond the simple class-effect case in A-005. Real cascades involve the TGA, MHRA, and FDA reporting at different cadences, can trigger trial holds, and can compound into a Data Safety Monitoring Board reconvocation.</li>
+        <li><strong>Geopolitical and sanctions failure modes.</strong> Russia and Belarus site closures since 2022. The Hungary EU dispute. Israel-area security closures. These are now a permanent feature of multi-regional trial portfolios. No public regulator catalogues them as a finding family, so any addition requires hand-authoring against company-specific risk registers.</li>
+        <li><strong>Cybersecurity incidents at sponsor or EDC vendor.</strong> Ransomware at a CRO, data exfiltration at an EDC vendor, business-continuity invocation that locks a sponsor out of its own trial database for seventy-two hours. Not in the EMA or FDA finding categories. Very real (multiple 2023-2024 health-system attacks affected trial conduct).</li>
+        <li><strong>CRO bankruptcy, acquisition, or staffing-collapse mid-trial.</strong> Vendor transition risk. The 99-scenario battery has eight vendor-management scenarios. None of them models a wholesale vendor change.</li>
+        <li><strong>Investigator misconduct beyond simple PI removal.</strong> Data fabrication, consent fraud, blinding subversion. Rare. Catastrophic when it happens. The battery covers PI removal as an enrolling-site continuity issue, not as a fraud cascade with a regulatory enforcement trail.</li>
+        <li><strong>AI-system failures in protocol authoring or monitoring.</strong> RAG hallucination missed by reviewer, model deprecation mid-trial that breaks a vendor integration, regulator request for model documentation under FDA's emerging AI / ML good-practice guidance. New territory. The EMA RBM 2024 report does not yet have a finding category for "AI failure mode."</li>
+        <li><strong>Real-world data integration failures.</strong> Wrong patient cohort matched in EHR-linked trials, ePRO compliance crash on a specific Android version, wearable data dropout on the dominant device. Scenario A-004 nibbles at this. A serious cut would need its own family.</li>
+        <li><strong>Operational shocks beyond pandemics.</strong> Extreme weather events affecting clusters of sites in one region. Labor strikes that close hospital research units. Local infrastructure failures. These look like the COVID disruption pattern (Price 2021 captures the resilience advantage of decentralised designs) but are not yet catalogued as their own finding family.</li>
+        <li><strong>Investigator-site staffing turnover at the operational layer.</strong> PI departure mid-trial, sub-investigator gap during a critical safety window, study coordinator turnover at the highest-enrolling site. The current battery treats site-staff transitions only at the gross "site activation lag" level (scenario A-002).</li>
+      </ol>
+
+      <p>
+        Twelve uncovered failure modes is a lot. The battery covers what regulators have systematically catalogued and published. It does not cover what regulators have not yet catalogued, or what is too new to have a public denominator. The next iteration of the methodology will add Layer D scenarios from the twelve families above, and the rubric will be extended to score them. Anyone forking the methodology should consider which of the twelve are load-bearing for their own sponsor's risk register, and add those Layer D scenarios first.
+      </p>
+      <p>
+        Naming the gap publicly is part of the discipline. The artefacts should be auditable. The limitations should be auditable. The next iteration should be visible from the current one.
+      </p>
+    </section>
+
+    <!-- ============================================================
+         §10 References
          ============================================================ -->
     <section class="prose references">
-      <h2><span class="section-no">VIII.</span> References</h2>
+      <h2><span class="section-no">X.</span> References</h2>
       <ol class="reference-list">
         <li id="ref-1">Getz K, et al. New Benchmarks Characterizing Protocol Amendment Practices, Trends and Their Impact on Clinical Trial Performance. <em>Therapeutic Innovation and Regulatory Science.</em> 2024. DOI 10.1007/s43441-024-00622-9.</li>
         <li id="ref-2">Deloitte Insights. Measuring the return from pharmaceutical innovation 2024.</li>
@@ -697,6 +778,6 @@
 
   </article>
 
-  <script src="app.js?v=2026-06-09-bloomberg"></script>
+  <script src="app.js?v=2026-06-09-integration"></script>
 </body>
 </html>

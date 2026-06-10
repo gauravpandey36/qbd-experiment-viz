@@ -698,3 +698,66 @@ article {
   .scenario-table thead th,
   .scenario-table tbody td { padding: 8px 10px; font-size: 13.5px; }
 }
+
+/* =====================================================================
+   adoption-steps + gap-list (sections VIII and IX, 2026-06-09)
+   ===================================================================== */
+
+.adoption-steps,
+.gap-list {
+  max-width: var(--max-prose);
+  margin: 28px auto 32px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: stepcount;
+}
+.adoption-steps li,
+.gap-list li {
+  counter-increment: stepcount;
+  position: relative;
+  padding: 14px 0 16px 56px;
+  border-bottom: 1px solid var(--rule-soft);
+  font-size: 17.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.adoption-steps li:last-child,
+.gap-list li:last-child { border-bottom: none; }
+.adoption-steps li::before,
+.gap-list li::before {
+  content: counter(stepcount);
+  position: absolute;
+  left: 0;
+  top: 16px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 38px;
+  letter-spacing: -0.02em;
+}
+.adoption-steps li strong,
+.gap-list li strong {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 19.5px;
+  font-weight: 700;
+  color: var(--ink);
+  display: inline;
+  margin-right: 4px;
+}
+.gap-list li::before {
+  background: var(--accent-bright);
+  color: var(--bg);
+}
+@media (max-width: 720px) {
+  .adoption-steps, .gap-list { padding: 0 16px; }
+  .adoption-steps li, .gap-list li { padding-left: 48px; font-size: 16px; }
+  .adoption-steps li::before, .gap-list li::before {
+    width: 32px; height: 32px; line-height: 32px; font-size: 15px;
+  }
+}
