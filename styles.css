@@ -6,19 +6,19 @@
  * ------------------------------------------------------------------ */
 
 :root {
-  --bg: #faf7f1;            /* warm cream */
-  --bg-tint: #f3eedf;       /* slightly darker cream for figure backgrounds */
-  --ink: #1c1a17;           /* near-black, warm */
-  --ink-soft: #3c382f;
-  --ink-muted: #6b6358;
-  --rule: #d6cfbe;          /* old-paper rule line */
-  --rule-soft: #ece6d5;
-  --accent: #0b3a5a;        /* deep navy, links, key numbers */
-  --accent-bright: #0f6e9c;
-  --accent-warm: #8a4b1c;   /* burnt sienna for pull quotes & emphasis */
-  --trad: #b07d3f;          /* warm bronze for traditional arm bars */
-  --qbd: #0b3a5a;           /* deep navy for QbD arm bars */
-  --met: #2f6b3d;           /* green for "threshold met" pills */
+  --bg: #fcfaf5;            /* warm cream */
+  --bg-tint: #eef1f5;       /* slightly darker cream for figure backgrounds */
+  --ink: #0a1e33;           /* near-black, warm */
+  --ink-soft: #2a3a4f;
+  --ink-muted: #6b7280;
+  --rule: #cdd5dd;          /* old-paper rule line */
+  --rule-soft: #e7ecf1;
+  --accent: #0a1e33;        /* deep navy, links, key numbers */
+  --accent-bright: #c4842a;
+  --accent-warm: #9c6a25;   /* burnt sienna for pull quotes & emphasis */
+  --trad: #c4842a;          /* warm bronze for traditional arm bars */
+  --qbd: #0a1e33;           /* deep navy for QbD arm bars */
+  --met: #0f5132;           /* green for "threshold met" pills */
   --max-prose: 38rem;       /* ~608px reading column */
   --max-wide: 56rem;        /* for figures + tables that need more space */
 }
@@ -42,7 +42,7 @@ a {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
-  text-decoration-color: rgba(11, 58, 90, 0.4);
+  text-decoration-color: rgba(10, 30, 51, 0.55);
   transition: text-decoration-color .15s, color .15s;
 }
 a:hover {
@@ -50,7 +50,7 @@ a:hover {
   text-decoration-color: var(--accent-bright);
 }
 
-::selection { background: rgba(11, 58, 90, 0.20); }
+::selection { background: rgba(196, 132, 42, 0.28); }
 
 /* ---------- Masthead ---------- */
 .masthead {
