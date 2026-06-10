@@ -1,7 +1,7 @@
 {
   "meta": {
     "experiment": "QbD-as-E6(R3)-CtQ-Operationalization",
-    "study_code": "GC-301 Phase 2b \u2014 synthetic protocol",
+    "study_code": "synthetic Phase 2b \u2014 synthetic protocol",
     "version": "harness-v1",
     "n_scenarios_total": 99,
     "n_scenarios_layerA": 7,
@@ -13,7 +13,7 @@
     "n_bootstrap": 1000,
     "qbd_apparatus_coverage": 1.0,
     "trad_apparatus_coverage": 0.127,
-    "disclaimer": "All examples reference GeneriCorp Therapeutics, a fictional pharmaceutical company built specifically for research and educational purposes. No proprietary content from any current or prior employer is used or implied. Per-metric anchors (Getz 2024 Tufts CSDD; de Viron 2022; Cilley 2025) are literature, not GeneriCorp data."
+    "disclaimer": "All scenarios, protocols, and results in this work are fully synthetic, built specifically for research and educational purposes. No proprietary content from any current or prior employer is used or implied. Per-metric anchors (Getz 2024 Tufts CSDD; de Viron 2022; Cilley 2025) are literature, not the synthetic sponsor data."
   },
   "headline_stats": [
     {

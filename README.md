@@ -1,7 +1,7 @@
 # QbD Experiment — Interactive Visualization Site
 
 Public-facing dashboard for the **QbD-as-E6(R3)-CtQ-Operationalization** experiment on the
-fictional GC-301 Phase 2b psoriasis study. Five panels: scenario diff, per-metric arm
+fictional synthetic Phase 2b psoriasis study. Five panels: scenario diff, per-metric arm
 comparison, interactive cost model, CtQ rubric heat map, layer breakdown.
 
 This is the audience-facing companion to the methodology paper.
@@ -37,7 +37,7 @@ The site uses `fetch('data/placeholder.json')`. Some browsers block `fetch` on `
 URLs, so prefer a tiny HTTP server:
 
 ```sh
-cd ~/GeneriCorp/qbd_experiment/viz/site
+cd ~/the synthetic sponsor/qbd_experiment/viz/site
 python3 -m http.server 8765 --bind 127.0.0.1
 # open http://127.0.0.1:8765/
 ```
@@ -85,7 +85,7 @@ folder = `/viz/site`. URL becomes `https://<user>.github.io/qbd_experiment/`.
 ### Route B — dedicated repo (recommended)
 
 ```sh
-cd ~/GeneriCorp/qbd_experiment/viz/site
+cd ~/the synthetic sponsor/qbd_experiment/viz/site
 git init
 git add .
 git commit -m "init: QbD experiment viz site"
@@ -101,7 +101,7 @@ No build step required. No CI required. Push and it ships.
 
 ## Design language
 
-Sibling to `~/GeneriCorp/website/public/` (the "Graphite & Vellum" system). Deep-blue
+Sibling to `~/the synthetic sponsor/website/public/` (the "Graphite & Vellum" system). Deep-blue
 (`#0b4a6f`) brand, teal (`#14b8a6`) accent, Inter for body, JetBrains Mono for numbers
 and IDs. Soft shadows, 14 px border radius. Trad arm is rendered in amber (`#b45309`)
 to read as warm-but-not-alarming; QbD arm is the brand blue.
